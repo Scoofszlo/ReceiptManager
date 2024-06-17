@@ -255,8 +255,13 @@ class ReceiptEntryList:
         print("--------------------")
 
     def write_receipt_output_file(self):
-        output = str(input("\nEnter the filename to save: "))
-        output += ".txt"
+        while True:
+            output = str(input("\nEnter the filename to save: "))
+            if re.search(r"^[\w\-. ]+$", output):
+                output += ".txt"
+                break
+            else:
+                print("ERROR: Invalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |)")
 
         with open(output, "w") as f:
             if self.date and self.time:

@@ -1,4 +1,5 @@
 import re
+import os
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -256,12 +257,13 @@ class ReceiptEntryList:
 
     def write_receipt_output_file(self):
         while True:
-            output = str(input("\nEnter the filename to save: "))
-            if re.search(r"^[\w\-. ]+$", output):
-                output += ".txt"
-                break
-            else:
+            output = str(input("\nEnter the filename w/ \".txt\" in the end: "))
+            if not re.search(r"^[\w\-. ]+$", output):
                 print("ERROR: Invalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |)")
+            elif os.path.exists(output):
+                print(f"ERROR: File \"{output}\" already exist. Please use a different filename.")
+            else:
+                break
 
         with open(output, "w") as f:
             if self.date and self.time:

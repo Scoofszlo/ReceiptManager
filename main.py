@@ -13,16 +13,19 @@ if __name__ == "__main__":
                     with open(file, "r") as file:
                         r.build_list_from_file(file)
                         r.ask_confirmation()
+                        input("\nPress Enter to exit...")
                         break
                 except FileNotFoundError:
                     print(f"ERROR: {file} is not found.")
+                    input("\nPress Enter to exit...")
                     exit(0)
                 break
             elif choosen_num == 2:
                 print("Code for this one will be written later.")
+                input("\nPress Enter to exit...")
                 break
             elif choosen_num == 3:
-                print("The program will now exit.")
+                input("\nPress Enter to exit...")
                 break
         except ValueError:
             print("\nInvalid value. Please enter a correct number.")

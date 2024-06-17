@@ -177,6 +177,7 @@ class ReceiptEntryList:
                     break
                 elif choosen_num == 3:
                     print("The program will now exit.")
+                    input("\nPress Enter to exit...")
                     exit(0)
             except ValueError:
                 print("\nInvalid value. Please enter a correct number.")

@@ -4,7 +4,7 @@ if __name__ == "__main__":
     print("Welcome to ReceiptChecker!")
     while True:
         try:
-            choosen_num = int(input("Please choose a number on what you want to do:\n1 = Read from file\n2 = Enter entries manually.\n3 = Exit\n\nEnter num: "))
+            choosen_num = int(input("Please choose a number on what you want to do:\n1 = Read from file\n2 = Enter entries manually\n3 = Exit\n\nEnter num: "))
 
             if choosen_num == 1:
                 r = ReceiptEntryList()
@@ -21,7 +21,8 @@ if __name__ == "__main__":
                     exit(0)
                 break
             elif choosen_num == 2:
-                print("Code for this one will be written later.")
+                r = ReceiptEntryList()
+                r.create_list_from_user()
                 input("\nPress Enter to exit...")
                 break
             elif choosen_num == 3:

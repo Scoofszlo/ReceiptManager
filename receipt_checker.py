@@ -75,6 +75,51 @@ class ReceiptEntryList:
             print("ERROR: INPUT.txt was not found in the working directory of this script file. Please ensure that the file exists and has the correct filename and file extension.")
             exit(0)
 
+    def create_list_from_user(self):
+        ctr = 1
+        while True:
+            print("\nEntry #", ctr, sep="")
+            while True:
+                item_name = str(input("Enter item name without spaces: "))
+                if re.search(r"\s", item_name):
+                    (print("\nINVALID: Please ensure item name has no spaces."))
+                else:
+                    break
+            while True:
+                quantity = str(input("Enter quantity:"))
+                if re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", quantity):
+                    break
+                else:
+                    print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
+            while True:
+                unit_price = str(input("Enter unit price: "))
+                if re.search(r"^P(?:\d+)?(?:\.\d+)?$", unit_price):
+                    break
+                else:
+                    print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., P250.46, P100.00)")
+
+            new_node = ReceiptEntryNode(item_name, quantity, unit_price[1:])
+
+            if self.head is None:
+                self.head = new_node
+                self.tail = new_node
+            else:
+                self.tail.next_node = new_node
+                new_node.previous_node = self.tail
+                self.tail = new_node
+
+            while True:
+                try:
+                    option = int(input("\nAdd more entry?\n1 = Yes\n2 = No\n\nEnter num: "))
+                    if option == 1:
+                        break
+                    elif option == 2:
+                        self.ask_confirmation()
+                except ValueError:
+                    print("INVALID: Invalid value. Please enter a correct number.")
+
+            ctr += 1
+
     def check_line_length(self, ctr, splitted_value, value):
         if len(splitted_value) >= 4:
             if ctr == 0:
@@ -190,8 +235,9 @@ class ReceiptEntryList:
         current = self.head
 
         print("\nThis is the result of your receipt entry.\n\n--------------------")
-        formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
-        print(f"{self.receipt_number} {formatted_date} {formatted_time}")
+        if self.date and self.time:
+            formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
+            print(f"{self.receipt_number} {formatted_date} {formatted_time}")
         while current is not None:
             print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
             total_price += current.entry.total_price
@@ -213,8 +259,9 @@ class ReceiptEntryList:
         output += ".txt"
 
         with open(output, "w") as f:
-            formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
-            f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
+            if self.date and self.time:
+                formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
+                f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
 
             current = self.head
             total_price = 0.0

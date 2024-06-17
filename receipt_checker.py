@@ -163,10 +163,6 @@ class ReceiptEntryList:
         formatted_date = date.strftime("%d/%m/%Y")
         formatted_time = time.strftime("%I:%M:%S%p")
 
-        # If 0 starts at HH, it will not be included (e.g., 02:55:55PM will become 2:55:55PM)
-        if formatted_time.startswith("0"):
-            formatted_time = formatted_time[1:]
-
         # Writes the rceipt number, along with formatted date and time in the OUTPUT.txt header line
         f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
 

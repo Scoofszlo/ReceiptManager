@@ -168,15 +168,7 @@ class ReceiptEntryList:
     
     def write_receipt_output_file(self):
         f = open("sample_output.txt", "w")
-
-        # Parses the time and date stored from header line using datetime module
-        date = datetime.strptime(self.date, "%m/%d/%Y")
-        time = datetime.strptime(self.time, "%H:%M:%S")
-
-        formatted_date = date.strftime("%Y/%m/%d")
-        formatted_time = time.strftime("%I:%M:%S %p")
-
-        # Writes the rceipt number, along with formatted date and time in the OUTPUT.txt header line
+        formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
         f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
 
         current = self.head
@@ -206,3 +198,13 @@ class ReceiptEntryList:
         f.write(f"P{total_price:.2f} {total_of_items}_{item_string}")
         print(f"SUCCESS: Registration of Receipt # {self.receipt_number} to OUTPUT.txt was successful. There are {total_of_items} {item_string} registered, amouting to a total of P{total_price} overall.")
         f.close()
+
+    def _get_formatted_date_and_time(self, date, time):
+        # Parses the time and date stored from header line using datetime module
+        date = datetime.strptime(self.date, "%m/%d/%Y")
+        time = datetime.strptime(self.time, "%H:%M:%S")
+
+        formatted_date = date.strftime("%Y/%m/%d")
+        formatted_time = time.strftime("%I:%M:%S %p")
+
+        return formatted_date, formatted_time

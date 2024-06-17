@@ -44,35 +44,33 @@ class ReceiptEntryList:
         self.head = None
         self.tail = None
 
-    def build_list_from_file(self):
+    def build_list_from_file(self, file):
         try:
-            # Reads the file from INPUT.txt
-            with open("sample_input.txt", "r") as file:
-                contents = file.read()
-                ctr = 0
-                for value in contents.splitlines():
-                    splitted_value = value.split()
-                    self.check_line_length(ctr, splitted_value, value)
+            contents = file.read()
+            ctr = 0
+            for value in contents.splitlines():
+                splitted_value = value.split()
+                self.check_line_length(ctr, splitted_value, value)
 
-                    if ctr == 0:
-                    # This if condition ensures the header line will not be included as a receipt entry from INPUT.txt
-                        self.check_header_line(ctr, splitted_value, value)
-                    # When no error happens or if the values are all valid, they will now be registered as a valid header line
-                        self.receipt_number = splitted_value[0]
-                        self.date = splitted_value[1]
-                        self.time = splitted_value[2]
+                if ctr == 0:
+                # This if condition ensures the header line will not be included as a receipt entry from INPUT.txt
+                    self.check_header_line(ctr, splitted_value, value)
+                # When no error happens or if the values are all valid, they will now be registered as a valid header line
+                    self.receipt_number = splitted_value[0]
+                    self.date = splitted_value[1]
+                    self.time = splitted_value[2]
+                else:
+                    self.check_receipt_entry(ctr, splitted_value, value)
+                    new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2][1:]))
+
+                    if self.head is None:
+                        self.head = new_node
+                        self.tail = new_node
                     else:
-                        self.check_receipt_entry(ctr, splitted_value, value)
-                        new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2][1:]))
-
-                        if self.head is None:
-                            self.head = new_node
-                            self.tail = new_node
-                        else:
-                            self.tail.next_node = new_node
-                            new_node.previous_node = self.tail
-                            self.tail = new_node
-                    ctr += 1
+                        self.tail.next_node = new_node
+                        new_node.previous_node = self.tail
+                        self.tail = new_node
+                ctr += 1
         except FileNotFoundError:
             print("ERROR: INPUT.txt was not found in the working directory of this script file. Please ensure that the file exists and has the correct filename and file extension.")
             exit(0)

@@ -168,12 +168,16 @@ class ReceiptEntryList:
         self.display_entries()
         while True:
             try:
-                choosen_num = int(input("\nChoose what you want to do with the result:\n1 = Write the results into a file.\n2 = Discard and exit the program.\n\nEnter num: "))
+                choosen_num = int(input("\nChoose what you want to do with the result:\n1 = Write the results into a file.\n2 = Sort the list by total price in descending order\n3 = Discard and exit the program.\n\nEnter num: "))
 
                 if choosen_num == 1:
                     self.write_receipt_output_file()
-                    break
+                    input("\nPress Enter to exit...")
+                    exit(0)
                 elif choosen_num == 2:
+                    self.sort_list()
+                    self.ask_confirmation()
+                elif choosen_num == 3:
                     print("The program will now exit.")
                     input("\nPress Enter to exit...")
                     exit(0)

@@ -187,7 +187,7 @@ class ReceiptEntryList:
         total_of_items = 0
         current = self.head
 
-        print("This is the result of your receipt entry.\n\n--------------------")
+        print("\nThis is the result of your receipt entry.\n\n--------------------")
         while current is not None:
             print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
             total_price += current.entry.total_price
@@ -205,7 +205,7 @@ class ReceiptEntryList:
         print("--------------------")
 
     def write_receipt_output_file(self):
-        output = str(input("Enter the filename to save: "))
+        output = str(input("\nEnter the filename to save: "))
         output += ".txt"
 
         with open(output, "w") as f:

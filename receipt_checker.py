@@ -53,91 +53,100 @@ class ReceiptEntryList:
                 ctr = 0
                 for value in contents.splitlines():
                     splitted_value = value.split()
-                    if len(splitted_value) >= 4:
-                        if ctr == 0:
-                            print("ERROR: Multiple values found in the header line of text file. Please ensure that receipt number, date, and, time are the only values at the header line. Receipt registration will be cancelled.")
-                        else:
-                            print(f"ERROR: Multiple values found in the receipt entry placed at Line #{ctr + 1} ({value}) of text file. Please ensure that each line of receipt entry contains only the item name, quantity, and unit price. Receipt registration will be cancelled.")
-                        exit(0)
-                    elif len(splitted_value) <= 2:
-                        if ctr == 0:
-                            print("ERROR: Header line lacks at least one required values (i.e., receipt number, date, or, time). Receipt registration will be cancelled.")
-                            exit(0)
-                        else:
-                            if len(splitted_value) == 0:
-                                print(f"ERROR: Receipt entry at Line #{(ctr+1)} lacks at least one required values (i.e., item name, quantity, or unit price). Receipt registration will be cancelled.")
-                            else:
-                                print(f"ERROR: Receipt entry at Line #{(ctr+1)} ({value}) lacks at least one required values (i.e., item name, quantity, or unit price). Receipt registration will be cancelled.")
-                            exit(0)
+                    self.check_line_length(ctr, splitted_value, value)
+
+                    if ctr == 0:
+                    # This if condition ensures the header line will not be included as a receipt entry from INPUT.txt
+                        self.check_header_line(ctr, splitted_value, value)
+                    # When no error happens or if the values are all valid, they will now be registered as a valid header line
+                        self.receipt_number = splitted_value[0]
+                        self.date = splitted_value[1]
+                        self.time = splitted_value[2]
                     else:
-                        # This if condition ensures the header line will not be included as a receipt entry from INPUT.txt
-                        if ctr == 0:
-                            # Uses RegEx to check if it's a valid receipt number
-                            filtered_receipt_number = re.search(r"^\d{1}-\d{2}-\d{4}-\d{2}$", splitted_value[0])
-                            if filtered_receipt_number is None:
-                                print("ERROR: Invalid receipt number. Ensure that the receipt number is in correct format (i.e., x-xx-xxxx-xx, where x is a positive whole number). Receipt registration will be cancelled.")
-                                exit(0)
-                            
-                            # Uses datetime module to check if date is valid or not
-                            try:
-                                filtered_time = re.search(r"^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", splitted_value[2])
-                                if filtered_time is None:
-                                    print("ERROR: Invalid date/time. The date and time is set in the future. Receipt registration will be cancelled.")
-                                    exit(0)
+                        self.check_receipt_entry(ctr, splitted_value, value)
+                        new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2][1:]))
 
-                                filtered_date = datetime.strptime(splitted_value[1] + " " + splitted_value[2], "%m/%d/%Y %H:%M:%S")
-                                current_date = datetime.now()
-
-                                if filtered_date > current_date:
-                                    print("ERROR: Invalid date/time. The date and time is set in the future. Receipt registration will be cancelled.")
-                                    exit(0)
-                            except ValueError:
-                                print("ERROR: Invalid date/time. Either date is not in proper MM/DD/YYYY format or time is not in HH:mm:SS format. Receipt registration will be cancelled.")
-                                exit(0)
-                            
-                            # When no error happens or if the values are all valid, they will now be registered as a valid header line
-                            self.receipt_number = splitted_value[0]
-                            self.date = splitted_value[1]
-                            self.time = splitted_value[2]
+                        if self.head is None:
+                            self.head = new_node
+                            self.tail = new_node
                         else:
-                            # Checks whether the item name of the receipt is a valid value or not
-                            filtered_item_name = re.search(r"^(\w+(_)?){1,}$", splitted_value[0])
-                            if filtered_item_name is None:
-                                print(f"ERROR: Invalid item name at Line #{(ctr + 1)} (>>>{splitted_value[0]}<<<, {splitted_value[1]}, {splitted_value[2]}). Item name must only include letters and numbers and can only be separated by underscore.")
-                                exit()
-                            
-                            # Turns item name into pascal case. Take note that using title() can be an alternative for this one
-                            # but sometimes it doesn't work in some situations
-                            splitted_item_name = splitted_value[0].split("_")
-                            splitted_value[0] = '_'.join(word.capitalize() for word in splitted_item_name)
-
-                            # Checks the item quantity whether if it is a positive integer or a quantity combined with valid units
-                            filtered_quantity = re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", splitted_value[1])
-                            if filtered_quantity is None:
-                                print(f"ERROR: Invalid quantity at Line #{(ctr + 1)} ({splitted_value[0]}, >>>{splitted_value[1]}<<<, {splitted_value[2]}). Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
-                                exit()
-                            
-                            # Checks the item unit price starts with "P" and has succeeding integer or float number
-                            filtered_unit_price = re.search(r"^P(?:\d+)?(?:\.\d+)?$", splitted_value[2])
-                            if filtered_unit_price is None:
-                                print(f"ERROR: Invalid unit price at Line #{(ctr + 1)} ({splitted_value[0]}, {splitted_value[1]}, >>>{splitted_value[2]}<<<). Ensure that it is in correct format (e.g., P250.46, P100.00)")
-                                exit()
-                        
-                            # When no error happens or if the values are all valid, this receipt entry will be registered in a node.
-                            # 3rd argument contains float() to ensure that the data being passed is a float. "1:" means the letter P in unit price will not be included for passing the value.
-                            new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2][1:]))
-
-                            if self.head is None:
-                                self.head = new_node
-                                self.tail = new_node
-                            else:
-                                self.tail.next_node = new_node
-                                new_node.previous_node = self.tail
-                                self.tail = new_node
-                        ctr += 1
+                            self.tail.next_node = new_node
+                            new_node.previous_node = self.tail
+                            self.tail = new_node
+                    ctr += 1
         except FileNotFoundError:
             print("ERROR: INPUT.txt was not found in the working directory of this script file. Please ensure that the file exists and has the correct filename and file extension.")
             exit(0)
+
+    def check_line_length(self, ctr, splitted_value, value):
+        if len(splitted_value) >= 4:
+            if ctr == 0:
+                print("ERROR: Multiple values found in the header line of text file. Please ensure that receipt number, date, and, time are the only values at the header line. Receipt registration will be cancelled.")
+            else:
+                print(f"ERROR: Multiple values found in the receipt entry placed at Line #{ctr + 1} ({value}) of text file. Please ensure that each line of receipt entry contains only the item name, quantity, and unit price. Receipt registration will be cancelled.")
+            exit(0)
+        elif len(splitted_value) <= 2:
+            if ctr == 0:
+                print("ERROR: Header line lacks at least one required values (i.e., receipt number, date, or, time). Receipt registration will be cancelled.")
+                exit(0)
+            else:
+                if len(splitted_value) == 0:
+                    print(f"ERROR: Receipt entry at Line #{(ctr+1)} lacks at least one required values (i.e., item name, quantity, or unit price). Receipt registration will be cancelled.")
+                else:
+                    print(f"ERROR: Receipt entry at Line #{(ctr+1)} ({value}) lacks at least one required values (i.e., item name, quantity, or unit price). Receipt registration will be cancelled.")
+                exit(0)
+
+    def check_header_line(self, ctr, splitted_value, value):
+        if ctr == 0:
+            # Uses RegEx to check if it's a valid receipt number
+            filtered_receipt_number = re.search(r"^\d{1}-\d{2}-\d{4}-\d{2}$", splitted_value[0])
+            if filtered_receipt_number is None:
+                print("ERROR: Invalid receipt number. Ensure that the receipt number is in correct format (i.e., x-xx-xxxx-xx, where x is a positive whole number). Receipt registration will be cancelled.")
+                exit(0)
+            
+            # Uses datetime module to check if date is valid or not
+            try:
+                filtered_time = re.search(r"^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", splitted_value[2])
+                if filtered_time is None:
+                    print("ERROR: Invalid date/time. The date and time is set in the future. Receipt registration will be cancelled.")
+                    exit(0)
+
+                filtered_date = datetime.strptime(splitted_value[1] + " " + splitted_value[2], "%m/%d/%Y %H:%M:%S")
+                current_date = datetime.now()
+
+                if filtered_date > current_date:
+                    print("ERROR: Invalid date/time. The date and time is set in the future. Receipt registration will be cancelled.")
+                    exit(0)
+            except ValueError:
+                print("ERROR: Invalid date/time. Either date is not in proper MM/DD/YYYY format or time is not in HH:mm:SS format. Receipt registration will be cancelled.")
+                exit(0)
+
+    def check_receipt_entry(self, ctr, splitted_value, value):
+        # Checks whether the item name of the receipt is a valid value or not
+        filtered_item_name = re.search(r"^(\w+(_)?){1,}$", splitted_value[0])
+        if filtered_item_name is None:
+            print(f"ERROR: Invalid item name at Line #{(ctr + 1)} (>>>{splitted_value[0]}<<<, {splitted_value[1]}, {splitted_value[2]}). Item name must only include letters and numbers and can only be separated by underscore.")
+            exit()
+        
+        # Turns item name into pascal case. Take note that using title() can be an alternative for this one
+        # but sometimes it doesn't work in some situations
+        splitted_item_name = splitted_value[0].split("_")
+        splitted_value[0] = '_'.join(word.capitalize() for word in splitted_item_name)
+
+        # Checks the item quantity whether if it is a positive integer or a quantity combined with valid units
+        filtered_quantity = re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", splitted_value[1])
+        if filtered_quantity is None:
+            print(f"ERROR: Invalid quantity at Line #{(ctr + 1)} ({splitted_value[0]}, >>>{splitted_value[1]}<<<, {splitted_value[2]}). Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
+            exit()
+        
+        # Checks the item unit price starts with "P" and has succeeding integer or float number
+        filtered_unit_price = re.search(r"^P(?:\d+)?(?:\.\d+)?$", splitted_value[2])
+        if filtered_unit_price is None:
+            print(f"ERROR: Invalid unit price at Line #{(ctr + 1)} ({splitted_value[0]}, {splitted_value[1]}, >>>{splitted_value[2]}<<<). Ensure that it is in correct format (e.g., P250.46, P100.00)")
+            exit()
+    
+        # When no error happens or if the values are all valid, this receipt entry will be registered in a node.
+        # 3rd argument contains float() to ensure that the data being passed is a float. "1:" means the letter P in unit price will not be included for passing the value.
 
     def swap(self, node_1, node_2):
         node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name

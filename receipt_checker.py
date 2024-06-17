@@ -190,6 +190,8 @@ class ReceiptEntryList:
         current = self.head
 
         print("\nThis is the result of your receipt entry.\n\n--------------------")
+        formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
+        print(f"{self.receipt_number} {formatted_date} {formatted_time}")
         while current is not None:
             print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
             total_price += current.entry.total_price

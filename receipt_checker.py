@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from decimal import Decimal, ROUND_HALF_UP
 
 class ReceiptEntry:
     item_name: str
@@ -12,7 +13,7 @@ class ReceiptEntryNode:
         self.entry = ReceiptEntry()
         self.entry.item_name = item_name
         self.entry.quantity = quantity
-        self.entry.unit_price = round(unit_price, 2)
+        self.entry.unit_price = self.round_num(unit_price)
         self.entry.total_price = self.compute_total_price(quantity, self.entry.unit_price)
         self.previous_node = None
         self.next_node = None
@@ -26,6 +27,12 @@ class ReceiptEntryNode:
             pass
         # Returns a computed total_price value to the self.entry.total_price above at the ReceiptEntryNode constructor
         return int(quantity) * unit_price
+    
+    def round_num(self, value):
+        num = Decimal(str(value))
+        rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        print(rounded_num)
+        return float(rounded_num)
 
 class ReceiptEntryList:
     # This function is always called when this class is instantiated.

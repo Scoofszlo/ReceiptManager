@@ -1,13 +1,11 @@
 import re
 from datetime import datetime
 
-# DO NOT EDIT
 class ReceiptEntry:
     item_name: str
     quantity: str
     unit_price: float
     total_price: float
-# END DO NOT EDIT
 
 class ReceiptEntryNode:
     def __init__(self, item_name, quantity, unit_price):

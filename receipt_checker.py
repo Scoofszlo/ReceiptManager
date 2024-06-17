@@ -31,7 +31,6 @@ class ReceiptEntryNode:
     def round_num(self, value):
         num = Decimal(str(value))
         rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
-        print(rounded_num)
         return float(rounded_num)
 
 class ReceiptEntryList:

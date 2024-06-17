@@ -167,37 +167,31 @@ class ReceiptEntryList:
             current = current.next_node
     
     def write_receipt_output_file(self):
-        f = open("sample_output.txt", "w")
-        formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
-        f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
+        with open("sample_output.txt", "w") as f:
+            formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
+            f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
 
-        current = self.head
-        total_price = 0.0
-        total_of_items = 0
+            current = self.head
+            total_price = 0.0
+            total_of_items = 0
 
-        while current is not None:
-            f.write(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}\n")
-            total_price += current.entry.total_price
+            while current is not None:
+                f.write(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}\n")
+                total_price += current.entry.total_price
 
-            # Ensures that the displayed total value will not result in weird x.xx000001 value when it should be x.xx
-            total_price = round(total_price, 2)
+                # Ensures that the displayed total value will not result in weird x.xx000001 value when it should be x.xx
+                total_price = round(total_price, 2)
+                total_of_items += self._add_entry_quantity(current.entry.quantity)
 
-            # Since quantities with units are treated 1, they must be filtered here using RegEx
-            filtered_quantity = re.search(r"^(?:0*[1-9][0-9]*)?(?:\.\d*|0+\.\d+)?(?:g|mL|L|kg)$", current.entry.quantity)
-            if filtered_quantity:
-                total_of_items += 1
+                current = current.next_node
+            
+            if total_of_items > 1 or total_of_items == 0:
+                item_string = "items"
             else:
-                total_of_items += int(current.entry.quantity)
-                
-            current = current.next_node
-        
-        if total_of_items > 1 or total_of_items == 0:
-            item_string = "items"
-        else:
-            item_string = "item"
-        f.write(f"P{total_price:.2f} {total_of_items}_{item_string}")
-        print(f"SUCCESS: Registration of Receipt # {self.receipt_number} to OUTPUT.txt was successful. There are {total_of_items} {item_string} registered, amouting to a total of P{total_price} overall.")
-        f.close()
+                item_string = "item"
+
+            f.write(f"P{total_price:.2f} {total_of_items}_{item_string}")
+            print(f"SUCCESS: Registration of Receipt # {self.receipt_number} to OUTPUT.txt was successful. There are {total_of_items} {item_string} registered, amouting to a total of P{total_price} overall.")
 
     def _get_formatted_date_and_time(self, date, time):
         # Parses the time and date stored from header line using datetime module
@@ -208,3 +202,11 @@ class ReceiptEntryList:
         formatted_time = time.strftime("%I:%M:%S %p")
 
         return formatted_date, formatted_time
+
+    def _add_entry_quantity(self, entry_quantity):
+        # Since quantities with units are treated 1, they must be filtered here using RegEx
+        filtered_quantity = re.search(r"^(?:0*[1-9][0-9]*)?(?:\.\d*|0+\.\d+)?(?:g|mL|L|kg)$", entry_quantity)
+        if filtered_quantity:
+            return 1
+        else:
+            return int(entry_quantity)

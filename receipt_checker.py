@@ -2,6 +2,11 @@ import re
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
+def round_num(value):
+    num = Decimal(str(value))
+    rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    return float(rounded_num)
+
 class ReceiptEntry:
     item_name: str
     quantity: str
@@ -13,7 +18,7 @@ class ReceiptEntryNode:
         self.entry = ReceiptEntry()
         self.entry.item_name = item_name
         self.entry.quantity = quantity
-        self.entry.unit_price = self.round_num(unit_price)
+        self.entry.unit_price = round_num(unit_price)
         self.entry.total_price = self.compute_total_price(quantity, self.entry.unit_price)
         self.previous_node = None
         self.next_node = None
@@ -27,11 +32,6 @@ class ReceiptEntryNode:
             pass
         # Returns a computed total_price value to the self.entry.total_price above at the ReceiptEntryNode constructor
         return int(quantity) * unit_price
-    
-    def round_num(self, value):
-        num = Decimal(str(value))
-        rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
-        return float(rounded_num)
 
 class ReceiptEntryList:
     # This function is always called when this class is instantiated.
@@ -179,8 +179,7 @@ class ReceiptEntryList:
                 f.write(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}\n")
                 total_price += current.entry.total_price
 
-                # Ensures that the displayed total value will not result in weird x.xx000001 value when it should be x.xx
-                total_price = round(total_price, 2)
+                total_price = round_num(total_price)
                 total_of_items += self._add_entry_quantity(current.entry.quantity)
 
                 current = current.next_node

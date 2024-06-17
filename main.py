@@ -12,8 +12,7 @@ if __name__ == "__main__":
                 try:
                     with open(file, "r") as file:
                         r.build_list_from_file(file)
-                        # r.sort_list()
-                        r.write_receipt_output_file()
+                        r.ask_confirmation()
                         break
                 except FileNotFoundError:
                     print(f"ERROR: {file} is not found.")

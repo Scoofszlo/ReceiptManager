@@ -163,9 +163,51 @@ class ReceiptEntryList:
                     self.swap(current.entry, next_value.entry)
                 next_value = next_value.next_node
             current = current.next_node
-    
+
+    def ask_confirmation(self):
+        self.display_entries()
+        while True:
+            try:
+                choosen_num = int(input("\nChoose what you want to do with the result:\n1 = Copy the result into clipboard.\n2 = Write the results into a file.\n3 = Discard and exit the program.\n\nEnter num: "))
+
+                if choosen_num == 1:
+                    pass
+                elif choosen_num == 2:
+                    self.write_receipt_output_file()
+                    break
+                elif choosen_num == 3:
+                    print("The program will now exit.")
+                    exit(0)
+            except ValueError:
+                print("\nInvalid value. Please enter a correct number.")
+
+    def display_entries(self):
+        total_price = 0.0
+        total_of_items = 0
+        current = self.head
+
+        print("This is the result of your receipt entry.\n\n--------------------")
+        while current is not None:
+            print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
+            total_price += current.entry.total_price
+
+            total_price = round_num(total_price)
+            total_of_items += self._add_entry_quantity(current.entry.quantity)
+
+            current = current.next_node
+
+        if total_of_items > 1 or total_of_items == 0:
+            item_string = "items"
+        else:
+            item_string = "item"
+        print(f"P{total_price:.2f} {total_of_items}_{item_string}")
+        print("--------------------")
+
     def write_receipt_output_file(self):
-        with open("sample_output.txt", "w") as f:
+        output = str(input("Enter the filename to save: "))
+        output += ".txt"
+
+        with open(output, "w") as f:
             formatted_date, formatted_time = self._get_formatted_date_and_time(self.date, self.time)
             f.write(f"{self.receipt_number} {formatted_date} {formatted_time}\n")
 
@@ -188,7 +230,7 @@ class ReceiptEntryList:
                 item_string = "item"
 
             f.write(f"P{total_price:.2f} {total_of_items}_{item_string}")
-            print(f"SUCCESS: Registration of Receipt # {self.receipt_number} to OUTPUT.txt was successful. There are {total_of_items} {item_string} registered, amouting to a total of P{total_price} overall.")
+            print(f"\nSUCCESS: The results has been saved to \"{output}\"")
 
     def _get_formatted_date_and_time(self, date, time):
         # Parses the time and date stored from header line using datetime module

@@ -37,7 +37,9 @@ def build_list_from_file(file):
 
     return receipt
 
-def create_list_from_user(self):
+def create_list_from_user():
+    receipt = ReceiptEntryList()
+
     ctr = 1
     while True:
         print("\nEntry #", ctr, sep="")
@@ -62,13 +64,13 @@ def create_list_from_user(self):
 
         new_node = ReceiptEntryNode(item_name, quantity, unit_price[1:])
 
-        if self.head is None:
-            self.head = new_node
-            self.tail = new_node
+        if receipt.head is None:
+            receipt.head = new_node
+            receipt.tail = new_node
         else:
-            self.tail.next_node = new_node
-            new_node.previous_node = self.tail
-            self.tail = new_node
+            receipt.tail.next_node = new_node
+            new_node.previous_node = receipt.tail
+            receipt.tail = new_node
 
         while True:
             try:
@@ -76,7 +78,7 @@ def create_list_from_user(self):
                 if option == 1:
                     break
                 elif option == 2:
-                    self.ask_confirmation()
+                    ask_confirmation(receipt)
             except ValueError:
                 print("INVALID: Invalid value. Please enter a correct number.")
 
@@ -269,8 +271,7 @@ if __name__ == "__main__":
                     except FileNotFoundError:
                         print(f"\nERROR: {file} is not found.")
             elif choosen_num == 2:
-                r = ReceiptEntryList()
-                r.create_list_from_user()
+                create_list_from_user()
                 input("\nPress Enter to exit...")
                 break
             elif choosen_num == 3:

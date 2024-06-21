@@ -182,9 +182,10 @@ def display_entries(receipt_obj):
     current = receipt_obj.head
 
     print("\nThis is the result of your receipt entry.\n\n--------------------")
-    if receipt_obj.date and receipt_obj.time:
-        formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
-        print(f"{receipt_obj.receipt_number} {formatted_date} {formatted_time}")
+    formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
+    formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
+    print(f"{formatted_receipt_number} {formatted_date} {formatted_time}")
+
     while current is not None:
         print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
         total_price += current.entry.total_price
@@ -212,9 +213,8 @@ def write_receipt_output_file(receipt_obj):
             break
 
     with open(output, "w") as f:
-        if receipt_obj.date and receipt_obj.time:
-            formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
-            f.write(f"{receipt_obj.receipt_number} {formatted_date} {formatted_time}\n")
+        formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
+        f.write(f"{receipt_obj.receipt_number} {formatted_date} {formatted_time}\n")
 
         current = receipt_obj.head
         total_price = 0.0
@@ -239,11 +239,11 @@ def write_receipt_output_file(receipt_obj):
 
 def get_formatted_date_and_time(date, time):
     # Parses the time and date stored from header line using datetime module
-    date = datetime.strptime(date, "%m/%d/%Y")
-    time = datetime.strptime(time, "%H:%M:%S")
+    date = datetime.strptime(date, "%m/%d/%Y") if date else None
+    time = datetime.strptime(time, "%H:%M:%S") if time else None
 
-    formatted_date = date.strftime("%Y/%m/%d")
-    formatted_time = time.strftime("%I:%M:%S %p")
+    formatted_date = date.strftime("%Y/%m/%d") if date else "<N0_RECEIPT_DATE>"
+    formatted_time = time.strftime("%I:%M:%S %p") if time else "<NO_RECEIPT_TIME>"
 
     return formatted_date, formatted_time
 

@@ -43,20 +43,25 @@ def create_list_from_user():
     ctr = 1
     while True:
         print("\nEntry #", ctr, sep="")
+        print("Enter item name without spaces: ")
         while True:
-            item_name = str(input("Enter item name without spaces: "))
+            item_name = str(input(">>> "))
             if re.search(r"\s", item_name):
                 (print("\nINVALID: Please ensure item name has no spaces."))
             else:
                 break
+        
+        print("Enter quantity:")
         while True:
-            quantity = str(input("Enter quantity:"))
+            quantity = str(input(">>> "))
             if re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", quantity):
                 break
             else:
                 print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
+        
+        print("Enter unit price: ")
         while True:
-            unit_price = str(input("Enter unit price: "))
+            unit_price = str(input(">>> "))
             if re.search(r"^P(?:\d+)?(?:\.\d+)?$", unit_price):
                 break
             else:

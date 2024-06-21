@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
 def round_num(value):
@@ -58,3 +59,105 @@ class ReceiptEntryList:
                     self.swap(current.entry, next_value.entry)
                 next_value = next_value.next_node
             current = current.next_node
+
+    def change_receipt_header(self):
+        def change_receipt_code(self):
+            new_name = str(input("Enter new receipt code:\n>>>"))
+            print(f"\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        self.receipt_number = new_name
+                        break
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+
+        def change_date(self):
+            current_date = datetime.strptime(self.date, "%m/%d/%Y") if self.date else None
+
+            print("\nEnter new date in YYYY/MM/DD format (e.g., 12/29/2000):")
+            while True:
+                new_date = str(input(">>>"))
+                try:
+                    filtered_date = datetime.strptime(new_date, "%m/%d/%Y")
+                    break
+                except ValueError:
+                    print("\nERROR: Invalid date. Please ensure that date is in proper format YYYY/MM/DD format (e.g., 12/29/2000)")
+
+            if current_date is not None:
+                print(f"\"{current_date.strftime("%m/%d/%Y")}\" will be changed into \"{filtered_date.strftime("%m/%d/%Y")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+            else:
+                print(f"New date will be \"{filtered_date.strftime("%m/%d/%Y")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        self.date = str(filtered_date.strftime("%m/%d/%Y"))
+                        break
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+            
+        def change_time(self):
+            current_time = datetime.strptime(self.time, "%H:%M:%S") if self.time else None
+
+            print("\nEnter new time in HH:MM:SS format (e.g., 20:01:59):")
+            while True:
+                new_time = str(input(">>>"))
+                try:
+                    filtered_time = datetime.strptime(new_time, "%H:%M:%S")
+                    break
+                except ValueError:
+                    print("\nERROR: Invalid time. Please ensure that time is in proper HH:MM:SS format (e.g., 20:01:59)")
+
+            if current_time is not None:
+                print(f"\"{current_time.strftime("%H:%M:%S")}\" will be changed into \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+            else:
+                print(f"New time will be \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        self.time = str(filtered_time.strftime("%H:%M:%S"))
+                        break
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+            
+        print(f"\nReceipt code: {self.receipt_number}")
+        print(f"Date/time: {self.date} {self.time}")
+
+        print("1 = Change receipt code\n2 = Change date\n3 = Change time\n4 = Go back\n\nEnter option: ")
+        while True:
+            try:
+                option = int(input(">>> "))
+
+                if option == 1:
+                    change_receipt_code(self)
+                    break
+                elif option == 2:
+                    change_date(self)
+                    break
+                elif option == 3:
+                    change_time(self)
+                    break
+                elif option == 4:
+                    break
+                else:
+                    print("\nInvalid option. Please enter a number between 1 and 4.")
+            except ValueError:
+                print("\nInvalid value. Please enter a correct number.")

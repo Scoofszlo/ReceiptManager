@@ -163,6 +163,7 @@ def ask_confirmation(receipt_obj):
                 exit(0)
             elif choosen_option == 2:
                 receipt_obj.sort_list()
+                display_entries(receipt_obj)
             elif choosen_option == 3:
                 print("The program will now exit.")
                 input("\nPress Enter to exit...")

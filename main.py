@@ -16,7 +16,7 @@ def build_list_from_file(file):
 
             if ctr == 0:
                 check_header_line(ctr, splitted_value, value)
-                receipt.receipt_code = splitted_value[0]
+                receipt.receipt_number = splitted_value[0]
                 receipt.date = splitted_value[1]
                 receipt.time = splitted_value[2]
             else:

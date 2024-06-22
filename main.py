@@ -171,7 +171,7 @@ def ask_confirmation(receipt_obj):
     def display_menu(receipt_obj):
         clear_console()
         display_entries(receipt_obj)
-        print("\nChoose what you want to do with the result:\n1 = Write the results into a file.\n2 = Sort the list by total price in descending order\n3 = Change receipt header\n4 = Discard and exit the program.")
+        print("\nChoose what you want to do with the result:\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Write the results into a file.\n7 = Discard and exit the program.")
 
     display_menu(receipt_obj)
     print("\nEnter option:")
@@ -181,21 +181,32 @@ def ask_confirmation(receipt_obj):
             choosen_option = int(input(">>> "))
 
             if choosen_option == 1:
-                write_receipt_output_file(receipt_obj)
-                input("\nPress Enter to exit...")
-                exit(0)
+                receipt_obj.add_entry()
+                display_entries(receipt_obj)
+                display_menu(receipt_obj)
+                print("\nEnter option:")
             elif choosen_option == 2:
+                pass
+            elif choosen_option == 2:
+                pass
+            elif choosen_option == 3:
+                pass
+            elif choosen_option == 4:
                 receipt_obj.sort_list()
                 display_entries(receipt_obj)
                 display_menu(receipt_obj)
                 print("\nEnter option:")
-            elif choosen_option == 3:
+            elif choosen_option == 5:
                 clear_console()
                 receipt_obj.change_receipt_header()
                 display_entries(receipt_obj)
                 display_menu(receipt_obj)
                 print("\nEnter option:")
-            elif choosen_option == 4:
+            elif choosen_option == 6:
+                write_receipt_output_file(receipt_obj)
+                input("\nPress Enter to exit...")
+                exit(0)
+            elif choosen_option == 7:
                 print("The program will now exit.")
                 input("\nPress Enter to exit...")
                 exit(0)
@@ -344,7 +355,7 @@ if __name__ == "__main__":
     def welcome_message():
         clear_console()
         print("Welcome to ReceiptChecker!")
-        print("Please choose a number on what you want to do:\n1 = Read from file\n2 = Enter entries manually\n3 = Exit")
+        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
     
     welcome_message()
     print("\nEnter option:")
@@ -367,7 +378,8 @@ if __name__ == "__main__":
                     except FileNotFoundError:
                         print(f"\nERROR: {file} is not found.")
             elif choosen_option == 2:
-                create_list_from_user()
+                receipt_obj = ReceiptEntryList()
+                ask_confirmation(receipt_obj)
                 input("\nPress Enter to exit...")
                 break
             elif choosen_option == 3:

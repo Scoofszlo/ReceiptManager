@@ -41,6 +41,45 @@ class ReceiptEntryList:
         self.head = None
         self.tail = None
 
+    def add_entry(self):
+        clear_console()
+
+        ctr = self.tail.entry.entry_position + 1
+        print("Entry #", ctr, sep="")
+        print("\nEnter item name without spaces: ")
+        while True:
+            item_name = str(input(">>> "))
+            if re.search(r"\s", item_name):
+                (print("\nINVALID: Please ensure item name has no spaces."))
+            else:
+                break
+        
+        print("\nEnter quantity:")
+        while True:
+            quantity = str(input(">>> "))
+            if re.search(r"^[0-9]+$", quantity):
+                break
+            else:
+                print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
+        
+        print("\nEnter unit price: ")
+        while True:
+            unit_price = str(input(">>> "))
+            if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
+                break
+            else:
+                print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
+
+        new_node = ReceiptEntryNode(item_name, quantity, float(unit_price), ctr)
+
+        if self.head is None:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next_node = new_node
+            new_node.previous_node = self.tail
+            self.tail = new_node
+
     def swap(self, node_1, node_2):
         node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
         node_1.quantity, node_2.quantity = node_2.quantity, node_1.quantity

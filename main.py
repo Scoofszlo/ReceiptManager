@@ -2,7 +2,7 @@ import re
 import os
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
-from receipt_checker import ReceiptEntryList, ReceiptEntryNode
+from receipt_entry import ReceiptEntryList, ReceiptEntryNode
 
 def build_list_from_file(file):
     receipt = ReceiptEntryList()

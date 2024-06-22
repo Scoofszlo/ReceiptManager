@@ -246,6 +246,7 @@ def write_receipt_output_file(receipt_obj):
             break
 
     with open(output, "w") as f:
+        column_spaces = get_column_space_length(receipt_obj)
         formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
         f.write(f"{receipt_obj.receipt_number} {formatted_date} {formatted_time}\n")
 
@@ -253,8 +254,21 @@ def write_receipt_output_file(receipt_obj):
         total_price = 0.0
         total_of_items = 0
 
+        column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+        f.write("{:<{}} {:<{}} {:<{}} {:<{}}".format(
+                column_header[0], column_spaces[0] + 2,
+                column_header[1], column_spaces[1] + 2,
+                column_header[2], column_spaces[2] + 2,
+                column_header[3], column_spaces[3] + 2
+        ))
+        
         while current is not None:
-            f.write(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}\n")
+            f.write("\n{:<{}} {:<{}} {:<{}} {:<{}}".format(
+            current.entry.item_name, column_spaces[0] + 2,
+            current.entry.quantity, column_spaces[1] + 2,
+            current.entry.unit_price, column_spaces[2] + 2,
+            current.entry.total_price, column_spaces[3] + 2
+        ))
             total_price += current.entry.total_price
 
             total_price = round_num(total_price)
@@ -267,7 +281,7 @@ def write_receipt_output_file(receipt_obj):
         else:
             item_string = "item"
 
-        f.write(f"P{total_price:.2f} {total_of_items}_{item_string}")
+        f.write(f"\n\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
         print(f"\nSUCCESS: The results has been saved to \"{output}\"")
 
 def get_formatted_date_and_time(date, time):

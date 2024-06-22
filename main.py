@@ -190,10 +190,11 @@ def ask_confirmation(receipt_obj):
                 display_entries(receipt_obj)
                 display_menu(receipt_obj)
                 print("\nEnter option:")
-            elif choosen_option == 2:
-                pass
             elif choosen_option == 3:
-                pass
+                receipt_obj.edit_entry_details()
+                display_entries(receipt_obj)
+                display_menu(receipt_obj)
+                print("\nEnter option:")
             elif choosen_option == 4:
                 receipt_obj.sort_list()
                 display_entries(receipt_obj)

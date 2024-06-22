@@ -119,6 +119,101 @@ class ReceiptEntryList:
             print("\nERROR: Cannot delete as there is nothing to delete.")
             input("Press any key to proceed...")
 
+    def edit_entry_details(self):
+        def change_item_name(node):
+            clear_console()
+            print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
+            new_name = str(input("\nEnter new item name:\n>>> "))
+            print(f"\n\"{node.entry.item_name}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        node.entry.item_name = new_name
+                        return
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+        
+        def change_quantity(node):
+            clear_console()
+            print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
+            
+            print("\nEnter new quantity:")
+            while True:
+                new_quantity = str(input(">>> "))
+                if re.search(r"^[0-9]+$", new_quantity):
+                    break
+                else:
+                    print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
+            
+            print(f"\n{node.entry.item_name}\'s quantity will be changed from \"{node.entry.quantity}\" to \"{new_quantity}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        node.entry.quantity = new_quantity
+                        node.entry.total_price = node.compute_total_price(new_quantity, node.entry.unit_price)
+                        return
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+
+        def choose_option(node):
+            clear_console()
+            print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
+            print("\nChoose option:\n1 = Edit item name\n2 = Edit quantity\n3 = Edit unit price\n4 = Go back\n\nChoose option:")
+            while True:
+                try:
+                    choosen_option = int(input(">>> "))
+                    if choosen_option == 1:
+                        change_item_name(node)
+                        return
+                    if choosen_option == 2:
+                        change_quantity(node)
+                        return
+                    if choosen_option == 3:
+                        pass
+                    if choosen_option == 4:
+                        return
+                    else:
+                        print("\nERROR: Please enter a valid number between 1 and 3.")
+                except ValueError:
+                    print("\nERROR: Please enter a valid number between 1 and 3.")
+
+        clear_console()
+
+        if self.head:
+            min_value = self.head.entry.entry_position
+            max_value = self.tail.entry.entry_position
+
+            print("\nType the position number of entry you want to change the:")
+            while True:
+                try:
+                    choosen_option = int(input(">>> "))
+                    if choosen_option >= min_value and choosen_option <= max_value:
+                        current = self.head
+                        while current:
+                            if choosen_option == current.entry.entry_position:
+                                choose_option(current)
+                                return
+                            current = current.next_node
+                    else:
+                        print("\nERROR: Please enter a valid number to change entry.")
+                except ValueError:
+                    print("\nERROR: Please enter a valid number to change entry.")
+        else:
+            print("\nERROR: Cannot edit as there is nothing to edit.")
+            input("Press any key to proceed...")
+
     def swap(self, node_1, node_2):
         node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
         node_1.quantity, node_2.quantity = node_2.quantity, node_1.quantity

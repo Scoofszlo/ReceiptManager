@@ -169,3 +169,7 @@ class ReceiptEntryList:
             except ValueError:
                 display_menu(self)
                 print("\nInvalid value. Please enter a correct number.")
+
+if __name__ == "__main__":
+    print("Please run the main.py to run the program.")
+    input("Press any key to exit...")

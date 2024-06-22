@@ -177,24 +177,6 @@ def ask_confirmation(receipt_obj):
             print("\nInvalid value. Please enter a correct number.")
 
 def display_entries(receipt_obj):
-    def get_column_space_length(receipt_obj):
-        item_name_max_length = 9
-        quantity_max_length = 8
-        unit_price_max_length = 10
-        total_price_max_length = 11
-
-        current = receipt_obj.head
-
-        while current is not None:
-            item_name_max_length = max(item_name_max_length, len(current.entry.item_name))
-            quantity_max_length = max(quantity_max_length, len(current.entry.quantity))
-            unit_price_max_length = max(unit_price_max_length, len(str(current.entry.unit_price)))
-            total_price_max_length = max(total_price_max_length, len(str(current.entry.total_price)))
-
-            current = current.next_node
-        
-        return [item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
-
     column_spaces = get_column_space_length(receipt_obj)
 
     total_price = 0.0
@@ -234,6 +216,24 @@ def display_entries(receipt_obj):
         item_string = "item"
     print(f"\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
     print("--------------------")
+
+def get_column_space_length(receipt_obj):
+    item_name_max_length = 9
+    quantity_max_length = 8
+    unit_price_max_length = 10
+    total_price_max_length = 11
+
+    current = receipt_obj.head
+
+    while current is not None:
+        item_name_max_length = max(item_name_max_length, len(current.entry.item_name))
+        quantity_max_length = max(quantity_max_length, len(current.entry.quantity))
+        unit_price_max_length = max(unit_price_max_length, len(str(current.entry.unit_price)))
+        total_price_max_length = max(total_price_max_length, len(str(current.entry.total_price)))
+
+        current = current.next_node
+    
+    return [item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
 
 def write_receipt_output_file(receipt_obj):
     while True:

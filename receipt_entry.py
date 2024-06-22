@@ -44,7 +44,7 @@ class ReceiptEntryList:
     def add_entry(self):
         clear_console()
 
-        ctr = self.tail.entry.entry_position + 1
+        ctr = self.tail.entry.entry_position + 1 if self.tail else 1
         print("Entry #", ctr, sep="")
         print("\nEnter item name without spaces: ")
         while True:

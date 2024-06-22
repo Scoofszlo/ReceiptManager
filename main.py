@@ -177,6 +177,26 @@ def ask_confirmation(receipt_obj):
             print("\nInvalid value. Please enter a correct number.")
 
 def display_entries(receipt_obj):
+    def get_column_space_length(receipt_obj):
+        item_name_max_length = 9
+        quantity_max_length = 8
+        unit_price_max_length = 10
+        total_price_max_length = 11
+
+        current = receipt_obj.head
+
+        while current is not None:
+            item_name_max_length = max(item_name_max_length, len(current.entry.item_name))
+            quantity_max_length = max(quantity_max_length, len(current.entry.quantity))
+            unit_price_max_length = max(unit_price_max_length, len(str(current.entry.unit_price)))
+            total_price_max_length = max(total_price_max_length, len(str(current.entry.total_price)))
+
+            current = current.next_node
+        
+        return [item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
+
+    column_spaces = get_column_space_length(receipt_obj)
+
     total_price = 0.0
     total_of_items = 0
     current = receipt_obj.head
@@ -186,8 +206,21 @@ def display_entries(receipt_obj):
     formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
     print(f"{formatted_receipt_number} {formatted_date} {formatted_time}")
 
+    column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+    print("{:<{}} {:<{}} {:<{}} {:<{}}".format(
+        column_header[0], column_spaces[0] + 2,
+        column_header[1], column_spaces[1] + 2,
+        column_header[2], column_spaces[2] + 2,
+        column_header[3], column_spaces[3] + 2
+    ))
+
     while current is not None:
-        print(f"{current.entry.item_name} {current.entry.quantity} P{current.entry.unit_price:.2f} P{current.entry.total_price:.2f}")
+        print("{:<{}} {:<{}} {:<{}} {:<{}}".format(
+            current.entry.item_name, column_spaces[0] + 2,
+            current.entry.quantity, column_spaces[1] + 2,
+            current.entry.unit_price, column_spaces[2] + 2,
+            current.entry.total_price, column_spaces[3] + 2
+        ))
         total_price += current.entry.total_price
 
         total_price = round_num(total_price)
@@ -199,7 +232,7 @@ def display_entries(receipt_obj):
         item_string = "items"
     else:
         item_string = "item"
-    print(f"P{total_price:.2f} {total_of_items}_{item_string}")
+    print(f"\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
     print("--------------------")
 
 def write_receipt_output_file(receipt_obj):

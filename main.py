@@ -38,12 +38,13 @@ def build_list_from_file(file):
     return receipt
 
 def create_list_from_user():
+    clear_console()
     receipt = ReceiptEntryList()
 
     ctr = 1
     while True:
-        print("\nEntry #", ctr, sep="")
-        print("Enter item name without spaces: ")
+        print("Entry #", ctr, sep="")
+        print("\nEnter item name without spaces: ")
         while True:
             item_name = str(input(">>> "))
             if re.search(r"\s", item_name):
@@ -51,7 +52,7 @@ def create_list_from_user():
             else:
                 break
         
-        print("Enter quantity:")
+        print("\nEnter quantity:")
         while True:
             quantity = str(input(">>> "))
             if re.search(r"^[0-9]+$", quantity):
@@ -59,7 +60,7 @@ def create_list_from_user():
             else:
                 print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
         
-        print("Enter unit price: ")
+        print("\nEnter unit price: ")
         while True:
             unit_price = str(input(">>> "))
             if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
@@ -79,15 +80,28 @@ def create_list_from_user():
 
         display_entries(receipt)
 
+        print("\nAdd more entry?\n1 = Yes\n2 = No\n\nEnter option: ")
+        
         while True:
             try:
-                option = int(input("\nAdd more entry?\n1 = Yes\n2 = No\n\nEnter num: "))
+                option = int(input(">>> "))
                 if option == 1:
+                    clear_console()
+                    display_entries(receipt)
+                    print()
                     break
                 elif option == 2:
                     ask_confirmation(receipt)
+                else:
+                    clear_console()
+                    display_entries(receipt)
+                    print("\nAdd more entry?\n1 = Yes\n2 = No")
+                    print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
             except ValueError:
-                print("INVALID: Invalid value. Please enter a correct number.")
+                clear_console()
+                display_entries(receipt)
+                print("\nAdd more entry?\n1 = Yes\n2 = No")
+                print("\nERROR: Invalid value. Please enter a correct number.")
 
         ctr += 1
 
@@ -160,7 +174,7 @@ def ask_confirmation(receipt_obj):
         print("\nChoose what you want to do with the result:\n1 = Write the results into a file.\n2 = Sort the list by total price in descending order\n3 = Change receipt header\n4 = Discard and exit the program.")
 
     display_menu(receipt_obj)
-    print("\nEnter num:")
+    print("\nEnter option:")
 
     while True:
         try:
@@ -174,13 +188,13 @@ def ask_confirmation(receipt_obj):
                 receipt_obj.sort_list()
                 display_entries(receipt_obj)
                 display_menu(receipt_obj)
-                print("\nEnter num:")
+                print("\nEnter option:")
             elif choosen_option == 3:
                 clear_console()
                 receipt_obj.change_receipt_header()
                 display_entries(receipt_obj)
                 display_menu(receipt_obj)
-                print("\nEnter num:")
+                print("\nEnter option:")
             elif choosen_option == 4:
                 print("The program will now exit.")
                 input("\nPress Enter to exit...")
@@ -329,13 +343,13 @@ if __name__ == "__main__":
         print("Please choose a number on what you want to do:\n1 = Read from file\n2 = Enter entries manually\n3 = Exit")
     
     welcome_message()
-    print("\nEnter num:")
+    print("\nEnter option:")
 
     while True:
         try:
-            choosen_num = int(input(">>> "))
+            choosen_option = int(input(">>> "))
 
-            if choosen_num == 1:
+            if choosen_option == 1:
                 clear_console()
                 print("Enter the filename including its extension (e.g., data.txt): ")
                 while True:
@@ -348,12 +362,11 @@ if __name__ == "__main__":
                             break
                     except FileNotFoundError:
                         print(f"\nERROR: {file} is not found.")
-            elif choosen_num == 2:
-                clear_console()
+            elif choosen_option == 2:
                 create_list_from_user()
                 input("\nPress Enter to exit...")
                 break
-            elif choosen_num == 3:
+            elif choosen_option == 3:
                 input("\nPress Enter to exit...")
                 break
             else:

@@ -67,7 +67,7 @@ class ReceiptEntryList:
 
         def change_receipt_code(self):
             clear_console()
-            new_name = str(input("\nEnter new receipt code:\n>>>"))
+            new_name = str(input("\nEnter new receipt code:\n>>> "))
             print(f"\n\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
@@ -89,7 +89,7 @@ class ReceiptEntryList:
 
             print("\nEnter new date in YYYY/MM/DD format (e.g., 2024/05/20):")
             while True:
-                new_date = str(input(">>>"))
+                new_date = str(input(">>> "))
                 try:
                     filtered_date = datetime.strptime(new_date, "%Y/%m/%d")
                     break
@@ -120,7 +120,7 @@ class ReceiptEntryList:
 
             print("\nEnter new time in HH:MM:SS format (e.g., 20:01:59):")
             while True:
-                new_time = str(input(">>>"))
+                new_time = str(input(">>> "))
                 try:
                     filtered_time = datetime.strptime(new_time, "%H:%M:%S")
                     break

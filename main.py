@@ -122,7 +122,7 @@ def check_header_line(ctr, splitted_value, value):
                 print("ERROR: Invalid date/time. The date and time is set in the future. Receipt registration will be cancelled.")
                 exit(0)
 
-            filtered_date = datetime.strptime(splitted_value[1] + " " + splitted_value[2], "%m/%d/%Y %H:%M:%S")
+            filtered_date = datetime.strptime(splitted_value[1] + " " + splitted_value[2], "%Y/%m/%d %H:%M:%S")
             current_date = datetime.now()
 
             if filtered_date > current_date:
@@ -184,9 +184,10 @@ def display_entries(receipt_obj):
     current = receipt_obj.head
 
     print("\nThis is the result of your receipt entry.\n\n--------------------")
-    formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
+    date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
+    time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
     formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
-    print(f"{formatted_receipt_number} {formatted_date} {formatted_time}")
+    print(f"{formatted_receipt_number} {date} {time}")
 
     column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
     print("{:<{}} {:<{}} {:<{}} {:<{}}".format(
@@ -247,8 +248,9 @@ def write_receipt_output_file(receipt_obj):
 
     with open(output, "w") as f:
         column_spaces = get_column_space_length(receipt_obj)
-        formatted_date, formatted_time = get_formatted_date_and_time(receipt_obj.date, receipt_obj.time)
-        f.write(f"{receipt_obj.receipt_number} {formatted_date} {formatted_time}\n")
+        date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
+        time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
+        f.write(f"{receipt_obj.receipt_number} {date} {time}\n")
 
         current = receipt_obj.head
         total_price = 0.0
@@ -283,16 +285,6 @@ def write_receipt_output_file(receipt_obj):
 
         f.write(f"\n\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
         print(f"\nSUCCESS: The results has been saved to \"{output}\"")
-
-def get_formatted_date_and_time(date, time):
-    # Parses the time and date stored from header line using datetime module
-    date = datetime.strptime(date, "%m/%d/%Y") if date else None
-    time = datetime.strptime(time, "%H:%M:%S") if time else None
-
-    formatted_date = date.strftime("%Y/%m/%d") if date else "<N0_RECEIPT_DATE>"
-    formatted_time = time.strftime("%I:%M:%S %p") if time else "<NO_RECEIPT_TIME>"
-
-    return formatted_date, formatted_time
 
 def add_entry_quantity(entry_quantity):
     # Since quantities with units are treated 1, they must be filtered here using RegEx

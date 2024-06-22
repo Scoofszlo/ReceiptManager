@@ -62,8 +62,8 @@ class ReceiptEntryList:
 
     def change_receipt_header(self):
         def change_receipt_code(self):
-            new_name = str(input("Enter new receipt code:\n>>>"))
-            print(f"\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+            new_name = str(input("\nEnter new receipt code:\n>>>"))
+            print(f"\n\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
                 try:
@@ -79,27 +79,27 @@ class ReceiptEntryList:
                     print("\nInvalid value. Please enter a correct number.")
 
         def change_date(self):
-            current_date = datetime.strptime(self.date, "%m/%d/%Y") if self.date else None
+            current_date = datetime.strptime(self.date, "%Y/%m/%d") if self.date else None
 
-            print("\nEnter new date in YYYY/MM/DD format (e.g., 12/29/2000):")
+            print("\nEnter new date in YYYY/MM/DD format (e.g., 2024/05/20):")
             while True:
                 new_date = str(input(">>>"))
                 try:
-                    filtered_date = datetime.strptime(new_date, "%m/%d/%Y")
+                    filtered_date = datetime.strptime(new_date, "%Y/%m/%d")
                     break
                 except ValueError:
-                    print("\nERROR: Invalid date. Please ensure that date is in proper format YYYY/MM/DD format (e.g., 12/29/2000)")
+                    print("\nERROR: Invalid date. Please ensure that date is in proper format YYYY/MM/DD format (e.g., 2024/05/20)")
 
             if current_date is not None:
-                print(f"\"{current_date.strftime("%m/%d/%Y")}\" will be changed into \"{filtered_date.strftime("%m/%d/%Y")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+                print(f"\n\"{current_date.strftime("%Y/%m/%d")}\" will be changed into \"{filtered_date.strftime("%Y/%m/%d")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
             else:
-                print(f"New date will be \"{filtered_date.strftime("%m/%d/%Y")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+                print(f"\nNew date will be \"{filtered_date.strftime("%Y/%m/%d")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
                 try:
                     option = int(input(">>> "))
                     if option == 1:
-                        self.date = str(filtered_date.strftime("%m/%d/%Y"))
+                        self.date = str(filtered_date.strftime("%Y/%m/%d"))
                         break
                     elif option == 2:
                         return
@@ -121,9 +121,9 @@ class ReceiptEntryList:
                     print("\nERROR: Invalid time. Please ensure that time is in proper HH:MM:SS format (e.g., 20:01:59)")
 
             if current_time is not None:
-                print(f"\"{current_time.strftime("%H:%M:%S")}\" will be changed into \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+                print(f"\n\"{current_time.strftime("%H:%M:%S")}\" will be changed into \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
             else:
-                print(f"New time will be \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+                print(f"\nNew time will be \"{filtered_time.strftime("%H:%M:%S")}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
                 try:
@@ -139,7 +139,7 @@ class ReceiptEntryList:
                     print("\nInvalid value. Please enter a correct number.")
             
         print(f"\nReceipt code: {self.receipt_number}")
-        print(f"Date/time: {self.date} {self.time}")
+        print(f"Date/time: {self.date}, {self.time}")
 
         print("1 = Change receipt code\n2 = Change date\n3 = Change time\n4 = Go back\n\nEnter option: ")
         while True:

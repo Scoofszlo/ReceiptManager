@@ -24,13 +24,6 @@ class ReceiptEntryNode:
         self.next_node = None
 
     def compute_total_price(self, quantity, unit_price):
-        # Since quantities with units are treated 1, they must be checked using RegEx 
-        filtered_quantity = re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*)?(([1-9]\d*|0)\.\d+)?(g|kg|mL|L)$", quantity)
-        if filtered_quantity:
-            quantity = 1
-        else:
-            pass
-        # Returns a computed total_price value to the self.entry.total_price above at the ReceiptEntryNode constructor
         return int(quantity) * unit_price
 
 class ReceiptEntryList:

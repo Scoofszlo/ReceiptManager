@@ -21,7 +21,7 @@ def build_list_from_file(file):
                 receipt.time = splitted_value[2]
             else:
                 check_receipt_entry(ctr, splitted_value, value)
-                new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2][1:]))
+                new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2]))
 
                 if receipt.head is None:
                     receipt.head = new_node
@@ -54,20 +54,20 @@ def create_list_from_user():
         print("Enter quantity:")
         while True:
             quantity = str(input(">>> "))
-            if re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", quantity):
+            if re.search(r"^[0-9]+$", quantity):
                 break
             else:
-                print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
+                print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
         
         print("Enter unit price: ")
         while True:
             unit_price = str(input(">>> "))
-            if re.search(r"^P(?:\d+)?(?:\.\d+)?$", unit_price):
+            if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
                 break
             else:
-                print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., P250.46, P100.00)")
+                print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
 
-        new_node = ReceiptEntryNode(item_name, quantity, unit_price[1:])
+        new_node = ReceiptEntryNode(item_name, quantity, float(unit_price))
 
         if receipt.head is None:
             receipt.head = new_node
@@ -141,14 +141,14 @@ def check_receipt_entry(ctr, splitted_value, value):
     splitted_item_name = splitted_value[0].split("_")
     splitted_value[0] = '_'.join(word.capitalize() for word in splitted_item_name)
 
-    filtered_quantity = re.search(r"^(?!0+(?:\.0+)?(?:g|kg|mL|L)?$)([1-9]\d*|0)(\.\d+(g|kg|mL|L))?(g|kg|mL|L)?$", splitted_value[1])
+    filtered_quantity = re.search(r"^[0-9]+$", splitted_value[1])
     if filtered_quantity is None:
-        print(f"ERROR: Invalid quantity at Line #{(ctr + 1)} ({splitted_value[0]}, >>>{splitted_value[1]}<<<, {splitted_value[2]}). Quantity must be a positive integer (1 and above) or a combination of positive integer/floating number and a unit (i.e., g, kg, mL, or L).")
+        print(f"ERROR: Invalid quantity at Line #{(ctr + 1)} ({splitted_value[0]}, >>>{splitted_value[1]}<<<, {splitted_value[2]}). Quantity must be a positive integer (1 or above).")
         exit()
     
-    filtered_unit_price = re.search(r"^P(?:\d+)?(?:\.\d+)?$", splitted_value[2])
+    filtered_unit_price = re.search(r"^(?:\d+)?(?:\.\d+)?$", splitted_value[2])
     if filtered_unit_price is None:
-        print(f"ERROR: Invalid unit price at Line #{(ctr + 1)} ({splitted_value[0]}, {splitted_value[1]}, >>>{splitted_value[2]}<<<). Ensure that it is in correct format (e.g., P250.46, P100.00)")
+        print(f"ERROR: Invalid unit price at Line #{(ctr + 1)} ({splitted_value[0]}, {splitted_value[1]}, >>>{splitted_value[2]}<<<). Ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
         exit()
 
 def ask_confirmation(receipt_obj):

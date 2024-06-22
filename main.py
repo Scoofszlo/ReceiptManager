@@ -110,7 +110,7 @@ def check_line_length(ctr, splitted_value, value):
 def check_header_line(ctr, splitted_value, value):
     if ctr == 0:
         # Uses RegEx to check if it's a valid receipt number
-        filtered_receipt_number = re.search(r"^\d{1}-\d{2}-\d{4}-\d{2}$", splitted_value[0])
+        filtered_receipt_number = re.search(r"^[\w-]+$", splitted_value[0])
         if filtered_receipt_number is None:
             print("ERROR: Invalid receipt number. Ensure that the receipt number is in correct format (i.e., x-xx-xxxx-xx, where x is a positive whole number). Receipt registration will be cancelled.")
             exit(0)

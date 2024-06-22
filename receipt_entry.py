@@ -167,6 +167,34 @@ class ReceiptEntryList:
                 except ValueError:
                     print("\nInvalid value. Please enter a correct number.")
 
+        def change_unit_price(node):
+            clear_console()
+            print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
+            
+            print("\nEnter new unit price:")
+            while True:
+                new_unit_price = str(input(">>> "))
+                if re.search(r"^(?:\d+)?(?:\.\d+)?$", new_unit_price):
+                    break
+                else:
+                    print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
+            
+            print(f"\n{node.entry.item_name}\'s unit price will be changed from \"{node.entry.unit_price}\" to \"{float(new_unit_price)}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+
+            while True:
+                try:
+                    option = int(input(">>> "))
+                    if option == 1:
+                        node.entry.unit_price = float(new_unit_price)
+                        node.entry.total_price = node.compute_total_price(node.entry.quantity, float(new_unit_price))
+                        return
+                    elif option == 2:
+                        return
+                    else:
+                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                except ValueError:
+                    print("\nInvalid value. Please enter a correct number.")
+
         def choose_option(node):
             clear_console()
             print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
@@ -181,7 +209,8 @@ class ReceiptEntryList:
                         change_quantity(node)
                         return
                     if choosen_option == 3:
-                        pass
+                        change_unit_price(node)
+                        return
                     if choosen_option == 4:
                         return
                     else:

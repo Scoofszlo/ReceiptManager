@@ -1,4 +1,5 @@
 import re
+import os
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -6,6 +7,10 @@ def round_num(value):
     num = Decimal(str(value))
     rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
     return float(rounded_num)
+
+def clear_console():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("\033[H", end="")
 
 class ReceiptEntry:
     item_name: str
@@ -54,7 +59,14 @@ class ReceiptEntryList:
             current = current.next_node
 
     def change_receipt_header(self):
+        def display_menu(self):
+            clear_console()
+            print(f"\nReceipt code: {self.receipt_number}")
+            print(f"Date/time: {self.date}, {self.time}")
+            print("\nChoose option\n1 = Change receipt code\n2 = Change date\n3 = Change time\n4 = Go back")
+
         def change_receipt_code(self):
+            clear_console()
             new_name = str(input("\nEnter new receipt code:\n>>>"))
             print(f"\n\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
@@ -72,6 +84,7 @@ class ReceiptEntryList:
                     print("\nInvalid value. Please enter a correct number.")
 
         def change_date(self):
+            clear_console()
             current_date = datetime.strptime(self.date, "%Y/%m/%d") if self.date else None
 
             print("\nEnter new date in YYYY/MM/DD format (e.g., 2024/05/20):")
@@ -102,6 +115,7 @@ class ReceiptEntryList:
                     print("\nInvalid value. Please enter a correct number.")
             
         def change_time(self):
+            clear_console()
             current_time = datetime.strptime(self.time, "%H:%M:%S") if self.time else None
 
             print("\nEnter new time in HH:MM:SS format (e.g., 20:01:59):")
@@ -131,10 +145,9 @@ class ReceiptEntryList:
                 except ValueError:
                     print("\nInvalid value. Please enter a correct number.")
             
-        print(f"\nReceipt code: {self.receipt_number}")
-        print(f"Date/time: {self.date}, {self.time}")
+        display_menu(self)
+        print("\nEnter option:")
 
-        print("1 = Change receipt code\n2 = Change date\n3 = Change time\n4 = Go back\n\nEnter option: ")
         while True:
             try:
                 option = int(input(">>> "))
@@ -151,6 +164,8 @@ class ReceiptEntryList:
                 elif option == 4:
                     break
                 else:
+                    display_menu(self)
                     print("\nInvalid option. Please enter a number between 1 and 4.")
             except ValueError:
+                display_menu(self)
                 print("\nInvalid value. Please enter a correct number.")

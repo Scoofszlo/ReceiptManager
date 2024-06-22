@@ -17,14 +17,16 @@ class ReceiptEntry:
     quantity: str
     unit_price: float
     total_price: float
+    entry_position: int
 
 class ReceiptEntryNode:
-    def __init__(self, item_name, quantity, unit_price):
+    def __init__(self, item_name, quantity, unit_price, entry_position):
         self.entry = ReceiptEntry()
         self.entry.item_name = item_name
         self.entry.quantity = quantity
         self.entry.unit_price = round_num(unit_price)
         self.entry.total_price = self.compute_total_price(quantity, self.entry.unit_price)
+        self.entry.entry_position = entry_position
         self.previous_node = None
         self.next_node = None
 

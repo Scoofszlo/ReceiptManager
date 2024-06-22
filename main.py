@@ -21,7 +21,7 @@ def build_list_from_file(file):
                 receipt.time = splitted_value[2]
             else:
                 check_receipt_entry(ctr, splitted_value, value)
-                new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2]))
+                new_node = ReceiptEntryNode(splitted_value[0], splitted_value[1], float(splitted_value[2]), ctr)
 
                 if receipt.head is None:
                     receipt.head = new_node
@@ -68,7 +68,7 @@ def create_list_from_user():
             else:
                 print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
 
-        new_node = ReceiptEntryNode(item_name, quantity, float(unit_price))
+        new_node = ReceiptEntryNode(item_name, quantity, float(unit_price), ctr)
 
         if receipt.head is None:
             receipt.head = new_node
@@ -220,21 +220,24 @@ def display_entries(receipt_obj):
     formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
     print(f"{formatted_receipt_number} {date} {time}")
 
-    column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-    print("{:<{}} {:<{}} {:<{}} {:<{}}".format(
+    column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+    print("{:{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
         column_header[0], column_spaces[0] + 2,
         column_header[1], column_spaces[1] + 2,
         column_header[2], column_spaces[2] + 2,
-        column_header[3], column_spaces[3] + 2
+        column_header[3], column_spaces[3] + 2,
+        column_header[4], column_spaces[4] + 2
     ))
 
     while current is not None:
-        print("{:<{}} {:<{}} {:<{}} {:<{}}".format(
-            current.entry.item_name, column_spaces[0] + 2,
-            current.entry.quantity, column_spaces[1] + 2,
-            current.entry.unit_price, column_spaces[2] + 2,
-            current.entry.total_price, column_spaces[3] + 2
+        print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+            current.entry.entry_position, column_spaces[0] + 2,
+            current.entry.item_name, column_spaces[1] + 2,
+            current.entry.quantity, column_spaces[2] + 2,
+            current.entry.unit_price, column_spaces[3] + 2,
+            current.entry.total_price, column_spaces[4] + 2
         ))
+
         total_price += current.entry.total_price
 
         total_price = round_num(total_price)
@@ -250,6 +253,7 @@ def display_entries(receipt_obj):
     print("--------------------")
 
 def get_column_space_length(receipt_obj):
+    position_max_length = 2
     item_name_max_length = 9
     quantity_max_length = 8
     unit_price_max_length = 10
@@ -265,7 +269,7 @@ def get_column_space_length(receipt_obj):
 
         current = current.next_node
     
-    return [item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
+    return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
 
 def write_receipt_output_file(receipt_obj):
     while True:

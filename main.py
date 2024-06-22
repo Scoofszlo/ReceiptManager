@@ -186,7 +186,10 @@ def ask_confirmation(receipt_obj):
                 display_menu(receipt_obj)
                 print("\nEnter option:")
             elif choosen_option == 2:
-                pass
+                receipt_obj.delete_entry()
+                display_entries(receipt_obj)
+                display_menu(receipt_obj)
+                print("\nEnter option:")
             elif choosen_option == 2:
                 pass
             elif choosen_option == 3:

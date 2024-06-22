@@ -80,6 +80,45 @@ class ReceiptEntryList:
             new_node.previous_node = self.tail
             self.tail = new_node
 
+    def delete_entry(self):
+        clear_console()
+
+        if self.head:
+            min_value = self.head.entry.entry_position
+            max_value= self.tail.entry.entry_position
+
+            while True:
+                try:
+                    choosen_option = int(input("\nType the position number of item you want to delete: "))
+                    if choosen_option >= min_value and choosen_option <= max_value:
+                        if self.head and self.head.entry.entry_position == choosen_option:
+                            self.head = self.head.next_node
+                            if not self.head:
+                                self.tail = None
+                            self.update_entry_position(self.head)
+                            return
+                        else:
+                            current = self.head
+                            previous = None
+
+                            while current:
+                                if current.entry.entry_position == choosen_option:
+                                    if previous:
+                                        previous.next_node = current.next_node
+                                        self.update_entry_position(current.next_node)
+                                    if current == self.tail:
+                                        self.tail = previous
+                                    return
+                                previous = current
+                                current = current.next_node
+                    else:
+                        print("ERROR: Please enter a valid number to delete.")
+                except ValueError:
+                    print("ERROR: Please enter a valid number to delete.")
+        else:
+            print("\nERROR: Cannot delete as there is nothing to delete.")
+            input("Press any key to proceed...")
+
     def swap(self, node_1, node_2):
         node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
         node_1.quantity, node_2.quantity = node_2.quantity, node_1.quantity
@@ -210,6 +249,13 @@ class ReceiptEntryList:
             except ValueError:
                 display_menu(self)
                 print("\nInvalid value. Please enter a correct number.")
+
+    def update_entry_position(self, node):
+        current = node
+
+        while current:
+            current.entry.entry_position -= 1
+            current = current.next_node
 
 if __name__ == "__main__":
     print("Please run the main.py to run the program.")

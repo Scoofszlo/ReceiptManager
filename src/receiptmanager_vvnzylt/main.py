@@ -1,5 +1,6 @@
 import re
 import os
+import json
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 from receiptmanager_vvnzylt.receipt_entry import ReceiptEntryList, ReceiptEntryNode
@@ -8,17 +9,34 @@ def main():
     def display_message():
         clear_console()
         print("Welcome to ReceiptChecker!")
-        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
+        print("Please choose a number on what you want to do:\n1 = Import a receipt list using .JSON file\n2 = Import a receipt list using .TXT file (LEGACY)\n3 = Create a receipt list (manually)\n4 = Exit")
     
     display_message()
-    
     print("\nEnter option:")
 
     while True:
         try:
             choosen_option = int(input(">>> "))
-
             if choosen_option == 1:
+                clear_console()
+                print("(Type \"CANCEL\" to go back)\n\nEnter filename:")
+                while True:
+                    file = str(input(">>> "))
+                    if file != "CANCEL":
+                        try:
+                            with open("user_data/saved_results/json/" + file + ".json", "r", encoding="utf-8") as file:
+                                receipt_obj = import_using_json(file)
+                                ask_confirmation(receipt_obj)
+                                display_message()
+                                print("\nEnter option:")
+                                break
+                        except FileNotFoundError:
+                            print(f"\nERROR: {file} is not found.")
+                    else:
+                        display_message()
+                        print("\nEnter option:")
+                        break
+            if choosen_option == 2:
                 clear_console()
                 print("(Type \"CANCEL\" to go back)\n\nEnter the filename including its extension (e.g., data.txt):")
                 while True:
@@ -37,18 +55,40 @@ def main():
                         display_message()
                         print("\nEnter option:")
                         break
-            elif choosen_option == 2:
+            elif choosen_option == 3:
                 receipt_obj = ReceiptEntryList()
                 ask_confirmation(receipt_obj)
                 display_message()
                 print("\nEnter option:")
-            elif choosen_option == 3:
+            elif choosen_option == 4:
                 input("\nPress Enter to exit...")
                 break
             else:
                 print("\nInvalid option. Please enter a number between 1 and 3.")
         except ValueError:
             print("\nInvalid value. Please enter a correct number.")
+
+def import_using_json(file):
+    receipt = ReceiptEntryList()
+
+    json_file = json.load(file)
+
+    receipt.receipt_number = json_file["receipt_header"]["receipt_code"]
+    receipt.date = json_file["receipt_header"]["date"]
+    receipt.time = json_file["receipt_header"]["time"]
+
+    for x in range(len(json_file["entries"])):
+        new_node = ReceiptEntryNode(json_file["entries"][x]["item_name"], json_file["entries"][x]["quantity"], float(json_file["entries"][x]["unit_price"]), json_file["entries"][x]["entry_position"])
+        
+        if receipt.head is None:
+            receipt.head = new_node
+            receipt.tail = new_node
+        else:
+            receipt.tail.next_node = new_node
+            new_node.previous_node = receipt.tail
+            receipt.tail = new_node
+
+    return receipt
 
 def build_list_from_file(file):
     receipt = ReceiptEntryList()

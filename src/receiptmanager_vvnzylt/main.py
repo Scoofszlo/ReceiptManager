@@ -5,9 +5,13 @@ from decimal import Decimal, ROUND_HALF_UP
 from receiptmanager_vvnzylt.receipt_entry import ReceiptEntryList, ReceiptEntryNode
 
 def main():
-    clear_console()
-    print("Welcome to ReceiptChecker!")
-    print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
+    def display_message():
+        clear_console()
+        print("Welcome to ReceiptChecker!")
+        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
+    
+    display_message()
+    
     print("\nEnter option:")
 
     while True:
@@ -16,22 +20,27 @@ def main():
 
             if choosen_option == 1:
                 clear_console()
-                print("Enter the filename including its extension (e.g., data.txt): ")
+                print("(Type \"CANCEL\" to go back)\n\nEnter the filename including its extension (e.g., data.txt):")
                 while True:
                     file = str(input(">>> "))
-                    try:
-                        with open(file, "r") as file:
-                            receipt_obj = build_list_from_file(file)
-                            ask_confirmation(receipt_obj)
-                            input("\nPress Enter to exit...")
-                            break
-                    except FileNotFoundError:
-                        print(f"\nERROR: {file} is not found.")
+                    if file != "CANCEL":
+                        try:
+                            with open(file, "r") as file:
+                                receipt_obj = build_list_from_file(file)
+                                ask_confirmation(receipt_obj)
+                                input("\nPress Enter to exit...")
+                                break
+                        except FileNotFoundError:
+                            print(f"\nERROR: {file} is not found.")
+                    else:
+                        display_message()
+                        print("\nEnter option:")
+                        break
             elif choosen_option == 2:
                 receipt_obj = ReceiptEntryList()
                 ask_confirmation(receipt_obj)
-                input("\nPress Enter to exit...")
-                break
+                display_message()
+                print("\nEnter option:")
             elif choosen_option == 3:
                 input("\nPress Enter to exit...")
                 break
@@ -206,7 +215,7 @@ def check_receipt_entry(ctr, splitted_value, value):
 def ask_confirmation(receipt_obj):
     def display_menu():
         display_entries(receipt_obj)
-        print("\nChoose option:\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Write the results into a file.\n7 = Discard and exit the program.")
+        print("\nChoose option:\n0 = Go back\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Write the results into a file.\n7 = Discard and exit the program.")
 
     display_menu()
     print("\nEnter option:")
@@ -215,7 +224,9 @@ def ask_confirmation(receipt_obj):
         try:
             choosen_option = int(input(">>> "))
 
-            if choosen_option == 1:
+            if choosen_option == 0:
+                return
+            elif choosen_option == 1:
                 receipt_obj.add_entry()
                 display_entries(receipt_obj)
                 display_menu()
@@ -243,8 +254,9 @@ def ask_confirmation(receipt_obj):
                 print("\nEnter option:")
             elif choosen_option == 6:
                 write_receipt_output_file(receipt_obj)
-                input("\nPress Enter to exit...")
-                exit(0)
+                display_entries(receipt_obj)
+                display_menu()
+                print("\nEnter option:")
             elif choosen_option == 7:
                 print("The program will now exit.")
                 input("\nPress Enter to exit...")
@@ -320,10 +332,13 @@ def get_column_space_length(receipt_obj):
     return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
 
 def write_receipt_output_file(receipt_obj):
-    print("\nEnter the filename w/ \".txt\" in the end:")
+    clear_console()
+    print("(Type \"CANCEL\" to go back)\n\nEnter the filename w/ \".txt\" in the end:")
     while True:
         output = str(input(">>> "))
-        if not re.search(r"^[\w\-. ]+$", output):
+        if output == "CANCEL":
+            return
+        elif not re.search(r"^[\w\-. ]+$", output):
             print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
         elif os.path.exists(output):
             print(f"\nFile \"{output}\" already exist. Please use a different filename.")
@@ -374,6 +389,7 @@ def write_receipt_output_file(receipt_obj):
 
         f.write(f"\n\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
         print(f"\nSUCCESS: The results has been saved to \"{output}\"")
+        input("Press Enter to continue...")
 
 def add_entry_quantity(entry_quantity):
     # Since quantities with units are treated 1, they must be filtered here using RegEx

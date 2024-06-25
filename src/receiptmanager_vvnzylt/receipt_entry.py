@@ -44,41 +44,51 @@ class ReceiptEntryList:
     def add_entry(self):
         clear_console()
 
-        ctr = self.tail.entry.entry_position + 1 if self.tail else 1
-        print("Entry #", ctr, sep="")
-        print("\nEnter item name without spaces: ")
         while True:
-            item_name = str(input(">>> "))
-            if re.search(r"\s", item_name):
-                (print("\nINVALID: Please ensure item name has no spaces."))
-            else:
-                break
-        
-        print("\nEnter quantity:")
-        while True:
-            quantity = str(input(">>> "))
-            if re.search(r"^[0-9]+$", quantity):
-                break
-            else:
-                print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
-        
-        print("\nEnter unit price: ")
-        while True:
-            unit_price = str(input(">>> "))
-            if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
-                break
-            else:
-                print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
+            print("(Type \"CANCEL\" to go back)\n")
+            ctr = self.tail.entry.entry_position + 1 if self.tail else 1
+            print("Entry #", ctr, sep="")
+            print("Enter item name without spaces: ")
+            while True:
+                item_name = str(input(">>> "))
+                if item_name == "CANCEL":
+                    return
+                if re.search(r"\s", item_name):
+                    (print("\nINVALID: Please ensure item name has no spaces."))
+                else:
+                    break
+            
+            print("\nEnter quantity:")
+            while True:
+                quantity = str(input(">>> "))
+                if quantity == "CANCEL":
+                    return
+                if re.search(r"^[0-9]+$", quantity):
+                    break
+                else:
+                    print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
+            
+            print("\nEnter unit price: ")
+            while True:
+                unit_price = str(input(">>> "))
+                if unit_price == "CANCEL":
+                    return
+                if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
+                    break
+                else:
+                    print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
 
-        new_node = ReceiptEntryNode(item_name, quantity, float(unit_price), ctr)
+            new_node = ReceiptEntryNode(item_name, quantity, float(unit_price), ctr)
 
-        if self.head is None:
-            self.head = new_node
-            self.tail = new_node
-        else:
-            self.tail.next_node = new_node
-            new_node.previous_node = self.tail
-            self.tail = new_node
+            if self.head is None:
+                self.head = new_node
+                self.tail = new_node
+            else:
+                self.tail.next_node = new_node
+                new_node.previous_node = self.tail
+                self.tail = new_node
+            
+            clear_console()
 
     def delete_entry(self):
         clear_console()
@@ -89,7 +99,12 @@ class ReceiptEntryList:
 
             while True:
                 try:
-                    choosen_option = int(input("\nType the position number of item you want to delete: "))
+                    choosen_option = str(input("(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: "))
+                    if choosen_option == "CANCEL":
+                        return
+                    else:
+                        choosen_option = int(choosen_option)
+
                     if choosen_option >= min_value and choosen_option <= max_value:
                         if self.head and self.head.entry.entry_position == choosen_option:
                             self.head = self.head.next_node
@@ -202,6 +217,8 @@ class ReceiptEntryList:
             while True:
                 try:
                     choosen_option = int(input(">>> "))
+                    if choose_option == 0:
+                        return
                     if choosen_option == 1:
                         change_item_name(node)
                         return
@@ -210,8 +227,6 @@ class ReceiptEntryList:
                         return
                     if choosen_option == 3:
                         change_unit_price(node)
-                        return
-                    if choosen_option == 4:
                         return
                     else:
                         print("\nERROR: Please enter a valid number between 1 and 3.")
@@ -224,10 +239,15 @@ class ReceiptEntryList:
             min_value = self.head.entry.entry_position
             max_value = self.tail.entry.entry_position
 
-            print("\nType the position number of entry you want to change the:")
+            print("(Type \"CANCEL\" to go back)\n\nType the position number of entry you want to change the details:")
             while True:
                 try:
-                    choosen_option = int(input(">>> "))
+                    choosen_option = str(input(">>> "))
+                    if choosen_option == "CANCEL":
+                        return
+                    else:
+                        choosen_option = int(choosen_option)
+
                     if choosen_option >= min_value and choosen_option <= max_value:
                         current = self.head
                         while current:
@@ -267,11 +287,15 @@ class ReceiptEntryList:
             clear_console()
             print(f"\nReceipt code: {self.receipt_number}")
             print(f"Date/time: {self.date}, {self.time}")
-            print("\nChoose option\n1 = Change receipt code\n2 = Change date\n3 = Change time\n4 = Go back")
+            print("\nChoose option:\n0 = Go back\n1 = Change receipt code\n2 = Change date\n3 = Change time")
 
         def change_receipt_code(self):
             clear_console()
-            new_name = str(input("\nEnter new receipt code:\n>>> "))
+            new_name = str(input("(Type \"CANCEL\" to go back)\n\nEnter new receipt code:\n>>> "))
+
+            if new_name == "CANCEL":
+                return
+
             print(f"\n\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
@@ -291,9 +315,13 @@ class ReceiptEntryList:
             clear_console()
             current_date = datetime.strptime(self.date, "%Y/%m/%d") if self.date else None
 
-            print("\nEnter new date in YYYY/MM/DD format (e.g., 2024/05/20):")
+            print("(Type \"CANCEL\" to go back)\n\nEnter new date in YYYY/MM/DD format (e.g., 2024/05/20):")
             while True:
                 new_date = str(input(">>> "))
+
+                if new_date == "CANCEL":
+                    return
+                
                 try:
                     filtered_date = datetime.strptime(new_date, "%Y/%m/%d")
                     break
@@ -322,9 +350,13 @@ class ReceiptEntryList:
             clear_console()
             current_time = datetime.strptime(self.time, "%H:%M:%S") if self.time else None
 
-            print("\nEnter new time in HH:MM:SS format (e.g., 20:01:59):")
+            print("(Type \"CANCEL\" to go back)\n\nEnter new time in HH:MM:SS format (e.g., 20:01:59):")
             while True:
                 new_time = str(input(">>> "))
+
+                if new_time == "CANCEL":
+                    return
+                
                 try:
                     filtered_time = datetime.strptime(new_time, "%H:%M:%S")
                     break
@@ -356,7 +388,9 @@ class ReceiptEntryList:
             try:
                 option = int(input(">>> "))
 
-                if option == 1:
+                if option == 0:
+                    return
+                elif option == 1:
                     change_receipt_code(self)
                     break
                 elif option == 2:
@@ -364,8 +398,6 @@ class ReceiptEntryList:
                     break
                 elif option == 3:
                     change_time(self)
-                    break
-                elif option == 4:
                     break
                 else:
                     print("\nInvalid option. Please enter a number between 1 and 4.")

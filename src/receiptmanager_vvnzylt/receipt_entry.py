@@ -1,5 +1,6 @@
 import re
 import os
+import json
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -415,6 +416,59 @@ class ReceiptEntryList:
         while current:
             current.entry.entry_position -= 1
             current = current.next_node
+
+    def export_as_json(self):
+        clear_console()
+        
+        if not self.head:
+            print("Cannot export as there is nothing to export.")
+            input("Press Enter to proceed...")
+            return
+        
+        print("(Type \"CANCEL\" to go back)\n\nEnter filename:")
+        while True:
+            output = str(input(">>> "))
+            if output == "CANCEL":
+                return
+            elif not re.search(r"^[\w\-. ]+$", output):
+                print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
+            elif os.path.exists("output/json/" + output + ".json"):
+                print(f"\nFile \"{output}.json\" already exist. Please use a different filename.")
+            else:
+                break
+
+        if not os.path.exists("output/json"):
+            os.makedirs("output/json")
+
+        receipt = {}
+        receipt_header = {
+            "receipt_code": self.receipt_number,
+            "date": self.date,
+            "time": self.time
+        }
+        entries = []
+
+        current = self.head
+        while current:
+            entry = {
+                "entry_position": current.entry.entry_position,
+                "item_name": current.entry.item_name,
+                "quantity": current.entry.quantity,
+                "unit_price": current.entry.quantity,
+                "total_price": current.entry.total_price
+            }
+        entries.append(entry)
+        current = current.next_node
+
+        receipt["receipt_header"] = receipt_header
+        receipt["entries"] = entries
+
+        json_file = json.dumps(receipt, indent=4, ensure_ascii=False)
+        with open("output/json/" + output + ".json", "w", encoding="utf-8") as f:
+            f.write(json_file)
+            f.flush()
+            print(f"\nSUCCESS: The results has been saved to \"/output/json/{output}.json\"")
+            input("Press Enter to proceed...")
 
 if __name__ == "__main__":
     print("Please run the main.py to run the program.")

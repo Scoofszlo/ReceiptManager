@@ -2,9 +2,10 @@ import re
 import os
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
-from receipt_entry import ReceiptEntryList, ReceiptEntryNode
+from receiptmanager_vvnzylt.receipt_entry import ReceiptEntryList, ReceiptEntryNode
 
 def main():
+    clear_console()
     print("Welcome to ReceiptChecker!")
     print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
     print("\nEnter option:")

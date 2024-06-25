@@ -338,6 +338,12 @@ def get_spacing_values_length(receipt_obj):
 
 def write_receipt_output_file(receipt_obj):
     clear_console()
+
+    if not receipt_obj.head:
+        print("Cannot write results as there is nothing to export.")
+        input("Press Enter to proceed...")
+        return
+    
     print("(Type \"CANCEL\" to go back)\n\nEnter the filename w/ \".txt\" in the end:")
     while True:
         output = str(input(">>> "))

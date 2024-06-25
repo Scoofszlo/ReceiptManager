@@ -267,52 +267,56 @@ def ask_confirmation(receipt_obj):
             print("\nInvalid value. Please enter a correct number.")
 
 def display_entries(receipt_obj):
-    column_spaces = get_column_space_length(receipt_obj)
+    clear_console()
+    
+    spacing_values = get_spacing_values_length(receipt_obj)
 
     total_price = 0.0
     total_of_items = 0
     current = receipt_obj.head
 
-    clear_console()
-    print("--------------------")
-    date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
-    time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
-    formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
-    print(f"{formatted_receipt_number} {date} {time}")
+    print("-" * spacing_values[5])
+    if not current:
+        print("LIST IS CURRENTLY EMPTY.\nReceipt entries will be previewed here.")
+    else:
+        date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
+        time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
+        formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
+        print(f"RECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
 
-    column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-    print("{:{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
-        column_header[0], column_spaces[0] + 2,
-        column_header[1], column_spaces[1] + 2,
-        column_header[2], column_spaces[2] + 2,
-        column_header[3], column_spaces[3] + 2,
-        column_header[4], column_spaces[4] + 2
-    ))
-
-    while current is not None:
-        print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
-            current.entry.entry_position, column_spaces[0] + 2,
-            current.entry.item_name, column_spaces[1] + 2,
-            current.entry.quantity, column_spaces[2] + 2,
-            current.entry.unit_price, column_spaces[3] + 2,
-            current.entry.total_price, column_spaces[4] + 2
+        column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+        print("{:{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+            column_header[0], spacing_values[0] + 2,
+            column_header[1], spacing_values[1] + 2,
+            column_header[2], spacing_values[2] + 2,
+            column_header[3], spacing_values[3] + 2,
+            column_header[4], spacing_values[4] + 2
         ))
 
-        total_price += current.entry.total_price
+        while current is not None:
+            print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                current.entry.entry_position, spacing_values[0] + 2,
+                current.entry.item_name, spacing_values[1] + 2,
+                current.entry.quantity, spacing_values[2] + 2,
+                current.entry.unit_price, spacing_values[3] + 2,
+                current.entry.total_price, spacing_values[4] + 2
+            ))
 
-        total_price = round_num(total_price)
-        total_of_items += add_entry_quantity(current.entry.quantity)
+            total_price += current.entry.total_price
 
-        current = current.next_node
+            total_price = round_num(total_price)
+            total_of_items += 1
 
-    if total_of_items > 1 or total_of_items == 0:
-        item_string = "items"
-    else:
-        item_string = "item"
-    print(f"\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
-    print("--------------------")
+            current = current.next_node
 
-def get_column_space_length(receipt_obj):
+        if total_of_items > 1 or total_of_items == 0:
+            item_string = "items"
+        else:
+            item_string = "item"
+        print(f"\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+    print("-" * spacing_values[5])
+
+def get_spacing_values_length(receipt_obj):
     position_max_length = 2
     item_name_max_length = 9
     quantity_max_length = 8
@@ -329,7 +333,8 @@ def get_column_space_length(receipt_obj):
 
         current = current.next_node
     
-    return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
+    spaces_total_length = 10 + position_max_length + item_name_max_length + quantity_max_length + unit_price_max_length + total_price_max_length
+    return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length, spaces_total_length]
 
 def write_receipt_output_file(receipt_obj):
     clear_console()
@@ -351,7 +356,7 @@ def write_receipt_output_file(receipt_obj):
         pass
 
     with open("output/" + output, "w") as f:
-        column_spaces = get_column_space_length(receipt_obj)
+        spacing_values = get_spacing_values_length(receipt_obj)
         date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
         time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
         f.write(f"{receipt_obj.receipt_number} {date} {time}\n")
@@ -362,18 +367,18 @@ def write_receipt_output_file(receipt_obj):
 
         column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
         f.write("{:<{}} {:<{}} {:<{}} {:<{}}".format(
-                column_header[0], column_spaces[0] + 2,
-                column_header[1], column_spaces[1] + 2,
-                column_header[2], column_spaces[2] + 2,
-                column_header[3], column_spaces[3] + 2
+                column_header[0], spacing_values[0] + 2,
+                column_header[1], spacing_values[1] + 2,
+                column_header[2], spacing_values[2] + 2,
+                column_header[3], spacing_values[3] + 2
         ))
         
         while current is not None:
             f.write("\n{:<{}} {:<{}} {:<{}} {:<{}}".format(
-            current.entry.item_name, column_spaces[0] + 2,
-            current.entry.quantity, column_spaces[1] + 2,
-            current.entry.unit_price, column_spaces[2] + 2,
-            current.entry.total_price, column_spaces[3] + 2
+            current.entry.item_name, spacing_values[0] + 2,
+            current.entry.quantity, spacing_values[1] + 2,
+            current.entry.unit_price, spacing_values[2] + 2,
+            current.entry.total_price, spacing_values[3] + 2
         ))
             total_price += current.entry.total_price
 

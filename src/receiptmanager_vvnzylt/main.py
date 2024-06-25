@@ -406,7 +406,7 @@ def write_receipt_output_file(receipt_obj):
         f.write("\n" + "-" * spacing_values[5])
         f.flush()
         print(f"\nSUCCESS: The results has been saved to \"{output}\"")
-        input("Press Enter to continue...")
+        input("Press Enter to proceed...")
 
 def add_entry_quantity(entry_quantity):
     # Since quantities with units are treated 1, they must be filtered here using RegEx

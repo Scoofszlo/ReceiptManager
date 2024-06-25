@@ -132,7 +132,7 @@ class ReceiptEntryList:
                     print("ERROR: Please enter a valid number to delete.")
         else:
             print("\nERROR: Cannot delete as there is nothing to delete.")
-            input("Press any key to proceed...")
+            input("Press Enter to proceed...")
 
     def edit_entry_details(self):
         def change_item_name(node):
@@ -261,7 +261,7 @@ class ReceiptEntryList:
                     print("\nERROR: Please enter a valid number to change entry.")
         else:
             print("\nERROR: Cannot edit as there is nothing to edit.")
-            input("Press any key to proceed...")
+            input("Press Enter to proceed...")
 
     def swap(self, node_1, node_2):
         node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
@@ -270,6 +270,8 @@ class ReceiptEntryList:
         node_1.total_price, node_2.total_price = node_2.total_price, node_1.total_price
 
     def sort_list(self):
+        clear_console()
+
         current = self.head
 
         while current is not None:
@@ -281,6 +283,9 @@ class ReceiptEntryList:
                     self.swap(current.entry, next_value.entry)
                 next_value = next_value.next_node
             current = current.next_node
+        
+        print("SUCCESS: Receipt entries sorted successfully.")
+        input("Press Enter to proceed.")
 
     def change_receipt_header(self):
         def display_menu(self):
@@ -413,4 +418,4 @@ class ReceiptEntryList:
 
 if __name__ == "__main__":
     print("Please run the main.py to run the program.")
-    input("Press any key to exit...")
+    input("Press Enter to exit...")

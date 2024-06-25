@@ -28,7 +28,8 @@ def main():
                             with open(file, "r") as file:
                                 receipt_obj = build_list_from_file(file)
                                 ask_confirmation(receipt_obj)
-                                input("\nPress Enter to exit...")
+                                display_message()
+                                print("\nEnter option:")
                                 break
                         except FileNotFoundError:
                             print(f"\nERROR: {file} is not found.")

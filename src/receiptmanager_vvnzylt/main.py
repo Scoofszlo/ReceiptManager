@@ -397,17 +397,17 @@ def write_receipt_output_file(receipt_obj):
             return
         elif not re.search(r"^[\w\-. ]+$", output):
             print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
-        elif os.path.exists("output/txt/" + output + ".txt"):
+        elif os.path.exists("user_data/saved_results/txt/" + output + ".txt"):
             print(f"\nFile \"{output}\" already exist. Please use a different filename.")
         else:
             break
 
-    if not os.path.exists("output/txt"):
-        os.makedirs("output/txt")
+    if not os.path.exists("user_data/saved_results/txt"):
+        os.makedirs("user_data/saved_results/txt")
     else:
         pass
 
-    with open("output/txt/" + output + ".txt", "w", encoding="utf-8") as f:
+    with open("user_data/saved_results/txt/" + output + ".txt", "w", encoding="utf-8") as f:
         current = receipt_obj.head
         spacing_values = get_spacing_values_length(receipt_obj)
         total_price = 0.0
@@ -451,7 +451,7 @@ def write_receipt_output_file(receipt_obj):
         f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
         f.write("\n" + "-" * spacing_values[5])
         f.flush()
-        print(f"\nSUCCESS: The results has been saved to \"{output}\"")
+        print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/txt/{output}.txt\"")
         input("Press Enter to proceed...")
 
 def add_entry_quantity(entry_quantity):

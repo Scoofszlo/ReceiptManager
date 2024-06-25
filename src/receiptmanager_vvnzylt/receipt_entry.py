@@ -432,13 +432,13 @@ class ReceiptEntryList:
                 return
             elif not re.search(r"^[\w\-. ]+$", output):
                 print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
-            elif os.path.exists("output/json/" + output + ".json"):
+            elif os.path.exists("user_data/saved_results/json/" + output + ".json"):
                 print(f"\nFile \"{output}.json\" already exist. Please use a different filename.")
             else:
                 break
 
-        if not os.path.exists("output/json"):
-            os.makedirs("output/json")
+        if not os.path.exists("user_data/saved_results/json"):
+            os.makedirs("user_data/saved_results/json")
 
         receipt = {}
         receipt_header = {
@@ -464,10 +464,10 @@ class ReceiptEntryList:
         receipt["entries"] = entries
 
         json_file = json.dumps(receipt, indent=4, ensure_ascii=False)
-        with open("output/json/" + output + ".json", "w", encoding="utf-8") as f:
+        with open("user_data/saved_results/json/" + output + ".json", "w", encoding="utf-8") as f:
             f.write(json_file)
             f.flush()
-            print(f"\nSUCCESS: The results has been saved to \"/output/json/{output}.json\"")
+            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/json/{output}.json\"")
             input("Press Enter to proceed...")
 
 if __name__ == "__main__":

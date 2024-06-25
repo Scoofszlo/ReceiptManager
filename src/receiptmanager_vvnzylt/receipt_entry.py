@@ -457,8 +457,8 @@ class ReceiptEntryList:
                 "unit_price": current.entry.quantity,
                 "total_price": current.entry.total_price
             }
-        entries.append(entry)
-        current = current.next_node
+            entries.append(entry)
+            current = current.next_node
 
         receipt["receipt_header"] = receipt_header
         receipt["entries"] = entries

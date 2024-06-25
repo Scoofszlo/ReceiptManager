@@ -4,6 +4,47 @@ from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 from receipt_entry import ReceiptEntryList, ReceiptEntryNode
 
+def main():
+    def welcome_message():
+        clear_console()
+        print("Welcome to ReceiptChecker!")
+        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
+    
+    welcome_message()
+    print("\nEnter option:")
+
+    while True:
+        try:
+            choosen_option = int(input(">>> "))
+
+            if choosen_option == 1:
+                clear_console()
+                print("Enter the filename including its extension (e.g., data.txt): ")
+                while True:
+                    file = str(input(">>> "))
+                    try:
+                        with open(file, "r") as file:
+                            receipt_obj = build_list_from_file(file)
+                            ask_confirmation(receipt_obj)
+                            input("\nPress Enter to exit...")
+                            break
+                    except FileNotFoundError:
+                        print(f"\nERROR: {file} is not found.")
+            elif choosen_option == 2:
+                receipt_obj = ReceiptEntryList()
+                ask_confirmation(receipt_obj)
+                input("\nPress Enter to exit...")
+                break
+            elif choosen_option == 3:
+                input("\nPress Enter to exit...")
+                break
+            else:
+                welcome_message()
+                print("\nInvalid option. Please enter a number between 1 and 3.")
+        except ValueError:
+            welcome_message()
+            print("\nInvalid value. Please enter a correct number.")
+
 def build_list_from_file(file):
     receipt = ReceiptEntryList()
 
@@ -354,44 +395,4 @@ def clear_console():
     print("\033[H", end="")
 
 if __name__ == "__main__":
-    receipt_objects = []
-
-    def welcome_message():
-        clear_console()
-        print("Welcome to ReceiptChecker!")
-        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
-    
-    welcome_message()
-    print("\nEnter option:")
-
-    while True:
-        try:
-            choosen_option = int(input(">>> "))
-
-            if choosen_option == 1:
-                clear_console()
-                print("Enter the filename including its extension (e.g., data.txt): ")
-                while True:
-                    file = str(input(">>> "))
-                    try:
-                        with open(file, "r") as file:
-                            receipt_obj = build_list_from_file(file)
-                            ask_confirmation(receipt_obj)
-                            input("\nPress Enter to exit...")
-                            break
-                    except FileNotFoundError:
-                        print(f"\nERROR: {file} is not found.")
-            elif choosen_option == 2:
-                receipt_obj = ReceiptEntryList()
-                ask_confirmation(receipt_obj)
-                input("\nPress Enter to exit...")
-                break
-            elif choosen_option == 3:
-                input("\nPress Enter to exit...")
-                break
-            else:
-                welcome_message()
-                print("\nInvalid option. Please enter a number between 1 and 3.")
-        except ValueError:
-            welcome_message()
-            print("\nInvalid value. Please enter a correct number.")
+    main()

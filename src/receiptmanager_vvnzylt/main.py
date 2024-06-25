@@ -362,34 +362,38 @@ def write_receipt_output_file(receipt_obj):
         pass
 
     with open("output/" + output, "w") as f:
-        spacing_values = get_spacing_values_length(receipt_obj)
-        date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
-        time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
-        f.write(f"{receipt_obj.receipt_number} {date} {time}\n")
-
         current = receipt_obj.head
+        spacing_values = get_spacing_values_length(receipt_obj)
         total_price = 0.0
         total_of_items = 0
 
-        column_header = ["ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-        f.write("{:<{}} {:<{}} {:<{}} {:<{}}".format(
+        f.write("-" * spacing_values[5])
+        date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
+        time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"
+        formatted_receipt_number = receipt_obj.receipt_number if receipt_obj.receipt_number else "<NO_RECEIPT_CODE>"
+        f.write(f"\nRECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
+
+        column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+        f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
                 column_header[0], spacing_values[0] + 2,
                 column_header[1], spacing_values[1] + 2,
                 column_header[2], spacing_values[2] + 2,
-                column_header[3], spacing_values[3] + 2
+                column_header[3], spacing_values[3] + 2,
+                column_header[4], spacing_values[4] + 2
         ))
         
         while current is not None:
-            f.write("\n{:<{}} {:<{}} {:<{}} {:<{}}".format(
-            current.entry.item_name, spacing_values[0] + 2,
-            current.entry.quantity, spacing_values[1] + 2,
-            current.entry.unit_price, spacing_values[2] + 2,
-            current.entry.total_price, spacing_values[3] + 2
+            f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                current.entry.entry_position, spacing_values[0] + 2,
+                current.entry.item_name, spacing_values[1] + 2,
+                current.entry.quantity, spacing_values[2] + 2,
+                current.entry.unit_price, spacing_values[3] + 2,
+                current.entry.total_price, spacing_values[4] + 2,
         ))
             total_price += current.entry.total_price
 
             total_price = round_num(total_price)
-            total_of_items += add_entry_quantity(current.entry.quantity)
+            total_of_items += 1
 
             current = current.next_node
         
@@ -398,7 +402,9 @@ def write_receipt_output_file(receipt_obj):
         else:
             item_string = "item"
 
-        f.write(f"\n\nTOTAL PRICE: {total_price:.2f} for {total_of_items} {item_string}")
+        f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+        f.write("\n" + "-" * spacing_values[5])
+        f.flush()
         print(f"\nSUCCESS: The results has been saved to \"{output}\"")
         input("Press Enter to continue...")
 

@@ -330,7 +330,12 @@ def write_receipt_output_file(receipt_obj):
         else:
             break
 
-    with open(output, "w") as f:
+    if not os.path.exists("output"):
+        os.makedirs("output")
+    else:
+        pass
+
+    with open("output/" + output, "w") as f:
         column_spaces = get_column_space_length(receipt_obj)
         date = receipt_obj.date if receipt_obj.date else "<N0_RECEIPT_DATE>"
         time = receipt_obj.time if receipt_obj.time else "<NO_RECEIPT_TIME>"

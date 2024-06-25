@@ -454,7 +454,7 @@ class ReceiptEntryList:
                 "entry_position": current.entry.entry_position,
                 "item_name": current.entry.item_name,
                 "quantity": current.entry.quantity,
-                "unit_price": current.entry.quantity,
+                "unit_price": current.entry.unit_price,
                 "total_price": current.entry.total_price
             }
             entries.append(entry)

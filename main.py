@@ -5,12 +5,8 @@ from decimal import Decimal, ROUND_HALF_UP
 from receipt_entry import ReceiptEntryList, ReceiptEntryNode
 
 def main():
-    def welcome_message():
-        clear_console()
-        print("Welcome to ReceiptChecker!")
-        print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
-    
-    welcome_message()
+    print("Welcome to ReceiptChecker!")
+    print("Please choose a number on what you want to do:\n1 = Create a receipt list (from file)\n2 = Create a receipt list (manually)\n3 = Exit")
     print("\nEnter option:")
 
     while True:
@@ -39,10 +35,8 @@ def main():
                 input("\nPress Enter to exit...")
                 break
             else:
-                welcome_message()
                 print("\nInvalid option. Please enter a number between 1 and 3.")
         except ValueError:
-            welcome_message()
             print("\nInvalid value. Please enter a correct number.")
 
 def build_list_from_file(file):
@@ -209,12 +203,11 @@ def check_receipt_entry(ctr, splitted_value, value):
         exit()
 
 def ask_confirmation(receipt_obj):
-    def display_menu(receipt_obj):
-        clear_console()
+    def display_menu():
         display_entries(receipt_obj)
-        print("\nChoose what you want to do with the result:\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Write the results into a file.\n7 = Discard and exit the program.")
+        print("\nChoose option:\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Write the results into a file.\n7 = Discard and exit the program.")
 
-    display_menu(receipt_obj)
+    display_menu()
     print("\nEnter option:")
 
     while True:
@@ -224,28 +217,28 @@ def ask_confirmation(receipt_obj):
             if choosen_option == 1:
                 receipt_obj.add_entry()
                 display_entries(receipt_obj)
-                display_menu(receipt_obj)
+                display_menu()
                 print("\nEnter option:")
             elif choosen_option == 2:
                 receipt_obj.delete_entry()
                 display_entries(receipt_obj)
-                display_menu(receipt_obj)
+                display_menu()
                 print("\nEnter option:")
             elif choosen_option == 3:
                 receipt_obj.edit_entry_details()
                 display_entries(receipt_obj)
-                display_menu(receipt_obj)
+                display_menu()
                 print("\nEnter option:")
             elif choosen_option == 4:
                 receipt_obj.sort_list()
                 display_entries(receipt_obj)
-                display_menu(receipt_obj)
+                display_menu()
                 print("\nEnter option:")
             elif choosen_option == 5:
                 clear_console()
                 receipt_obj.change_receipt_header()
                 display_entries(receipt_obj)
-                display_menu(receipt_obj)
+                display_menu()
                 print("\nEnter option:")
             elif choosen_option == 6:
                 write_receipt_output_file(receipt_obj)
@@ -256,10 +249,8 @@ def ask_confirmation(receipt_obj):
                 input("\nPress Enter to exit...")
                 exit(0)
             else:
-                display_menu(receipt_obj)
                 print("\nInvalid option. Please enter a number between 1 and 4.")
         except ValueError:
-            display_menu(receipt_obj)
             print("\nInvalid value. Please enter a correct number.")
 
 def display_entries(receipt_obj):
@@ -328,12 +319,13 @@ def get_column_space_length(receipt_obj):
     return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length]
 
 def write_receipt_output_file(receipt_obj):
+    print("\nEnter the filename w/ \".txt\" in the end:")
     while True:
-        output = str(input("\nEnter the filename w/ \".txt\" in the end: "))
+        output = str(input(">>> "))
         if not re.search(r"^[\w\-. ]+$", output):
-            print(r"ERROR: Invalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |)")
+            print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
         elif os.path.exists(output):
-            print(f"ERROR: File \"{output}\" already exist. Please use a different filename.")
+            print(f"\nFile \"{output}\" already exist. Please use a different filename.")
         else:
             break
 

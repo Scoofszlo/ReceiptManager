@@ -368,10 +368,8 @@ class ReceiptEntryList:
                 elif option == 4:
                     break
                 else:
-                    display_menu(self)
                     print("\nInvalid option. Please enter a number between 1 and 4.")
             except ValueError:
-                display_menu(self)
                 print("\nInvalid value. Please enter a correct number.")
 
     def update_entry_position(self, node):

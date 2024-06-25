@@ -350,24 +350,24 @@ def write_receipt_output_file(receipt_obj):
         input("Press Enter to proceed...")
         return
     
-    print("(Type \"CANCEL\" to go back)\n\nEnter the filename w/ \".txt\" in the end:")
+    print("(Type \"CANCEL\" to go back)\n\nEnter filename:")
     while True:
         output = str(input(">>> "))
         if output == "CANCEL":
             return
         elif not re.search(r"^[\w\-. ]+$", output):
             print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
-        elif os.path.exists(output):
+        elif os.path.exists("output/txt/" + output + ".txt"):
             print(f"\nFile \"{output}\" already exist. Please use a different filename.")
         else:
             break
 
-    if not os.path.exists("output"):
-        os.makedirs("output")
+    if not os.path.exists("output/txt"):
+        os.makedirs("output/txt")
     else:
         pass
 
-    with open("output/" + output, "w") as f:
+    with open("output/txt/" + output + ".txt", "w", encoding="utf-8") as f:
         current = receipt_obj.head
         spacing_values = get_spacing_values_length(receipt_obj)
         total_price = 0.0

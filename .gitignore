@@ -1,4 +1,15 @@
 __pycache__
+.vscode
+
+# PyInstaller
+*.spec
+build/
+dist/
+setup.py
+cli.py
+makefile
+
+# Test data
 sample_input.txt
 test.py
-.vscode
+user_data

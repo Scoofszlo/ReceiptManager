@@ -214,11 +214,11 @@ class ReceiptEntryList:
         def choose_option(node):
             clear_console()
             print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
-            print("\nChoose option:\n1 = Edit item name\n2 = Edit quantity\n3 = Edit unit price\n4 = Go back\n\nChoose option:")
+            print("\nChoose option:\n0 = Go back\n1 = Edit item name\n2 = Edit quantity\n3 = Edit unit price\n\n\nChoose option:")
             while True:
                 try:
                     choosen_option = int(input(">>> "))
-                    if choose_option == 0:
+                    if choosen_option == 0:
                         return
                     if choosen_option == 1:
                         change_item_name(node)
@@ -230,9 +230,9 @@ class ReceiptEntryList:
                         change_unit_price(node)
                         return
                     else:
-                        print("\nERROR: Please enter a valid number between 1 and 3.")
+                        print("\nERROR: Please enter a valid number between 0 and 3.")
                 except ValueError:
-                    print("\nERROR: Please enter a valid number between 1 and 3.")
+                    print("\nERROR: Please enter a valid number between 0 and 3.")
 
         clear_console()
 
@@ -392,21 +392,21 @@ class ReceiptEntryList:
 
         while True:
             try:
-                option = int(input(">>> "))
+                choosen_option = int(input(">>> "))
 
-                if option == 0:
+                if choosen_option == 0:
                     return
-                elif option == 1:
+                elif choosen_option == 1:
                     change_receipt_code(self)
                     break
-                elif option == 2:
+                elif choosen_option == 2:
                     change_date(self)
                     break
-                elif option == 3:
+                elif choosen_option == 3:
                     change_time(self)
                     break
                 else:
-                    print("\nInvalid option. Please enter a number between 1 and 4.")
+                    print("\nInvalid option. Please enter a number between 0 and 3.")
             except ValueError:
                 print("\nInvalid value. Please enter a correct number.")
 

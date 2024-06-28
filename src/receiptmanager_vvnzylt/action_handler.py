@@ -2,6 +2,7 @@ import os
 import json
 from receiptmanager_vvnzylt.receipt_entry import ReceiptEntryList, ReceiptEntryNode
 from receiptmanager_vvnzylt.legacy.receipt_validator import check_line_length, check_header_line, check_receipt_entry
+from receiptmanager_vvnzylt.program_settings import change_program_settings
 
 def choose_action(action):
     if action == "IMPORT_USING_JSON":
@@ -24,6 +25,8 @@ def choose_action(action):
         receipt_obj = ReceiptEntryList()
         receipt_options_menu(receipt_obj)
         return
+    elif action == "EDIT_OPTIONS":
+        change_program_settings()
 
 def get_valid_json_file():
     print("(Type \"CANCEL\" to go back)\n\nEnter file name:")

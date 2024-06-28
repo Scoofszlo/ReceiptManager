@@ -5,7 +5,7 @@ def main():
     def display_message():
         clear_console()
         print("Welcome to ReceiptChecker!")
-        print("Please choose a number on what you want to do:\n1 = Import a receipt list using .JSON file\n2 = Import a receipt list using .TXT file (LEGACY)\n3 = Create a receipt list (manually)\n4 = Exit")
+        print("Please choose a number on what you want to do:\n1 = Import a receipt list using .JSON file\n2 = Import a receipt list using .TXT file (LEGACY)\n3 = Create a receipt list (manually)\n4 = Change program setitngs\n5 = Exit")
 
     display_message()
     print("\nEnter option:")
@@ -24,10 +24,13 @@ def main():
                 clear_console()
                 choose_action("CREATE_MANUALLY")
             elif option == 4:
+                clear_console()
+                choose_action("EDIT_OPTIONS")
+            elif option == 5:
                 input("\nPress Enter to exit...")
                 break
             else:
-                print("\nInvalid option. Please enter a number between 1 and 4.")
+                print("\nInvalid option. Please enter a number between 1 and 5.")
                 continue
         except ValueError:
             print("\nInvalid value. Please enter a correct number.")

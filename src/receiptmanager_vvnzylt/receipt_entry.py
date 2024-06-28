@@ -3,6 +3,8 @@ import os
 import json
 from datetime import datetime
 from receiptmanager_vvnzylt.utils import round_num, clear_console
+from receiptmanager_vvnzylt.currency import get_currency
+from receiptmanager_vvnzylt.config import load_config
 
 class ReceiptEntry:
     item_name: str
@@ -32,6 +34,7 @@ class ReceiptEntryList:
         self.time = None
         self.head = None
         self.tail = None
+        self.config = load_config()
 
     def add_entry(self):
         clear_console()
@@ -575,12 +578,13 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
+                formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
                 print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
                     current.entry.quantity, spacing_values[2] + 2,
                     current.entry.unit_price, spacing_values[3] + 2,
-                    current.entry.total_price, spacing_values[4] + 2
+                    formatted_total_price, spacing_values[4] + 2
                 ))
 
                 total_price += current.entry.total_price

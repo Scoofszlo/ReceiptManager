@@ -2,16 +2,7 @@ import re
 import os
 import json
 from datetime import datetime
-from decimal import Decimal, ROUND_HALF_UP
-
-def round_num(value):
-    num = Decimal(str(value))
-    rounded_num = num.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
-    return float(rounded_num)
-
-def clear_console():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\033[H", end="")
+from receiptmanager_vvnzylt.utils import round_num, clear_console
 
 class ReceiptEntry:
     item_name: str
@@ -46,33 +37,33 @@ class ReceiptEntryList:
         clear_console()
 
         while True:
-            print("(Type \"CANCEL\" to go back)\n")
+            print("(Type \"DONE\" to stop adding entries)\n")
             ctr = self.tail.entry.entry_position + 1 if self.tail else 1
             print("Entry #", ctr, sep="")
             print("Enter item name without spaces: ")
             while True:
                 item_name = str(input(">>> "))
-                if item_name == "CANCEL":
+                if item_name == "DONE":
                     return
                 if re.search(r"\s", item_name):
                     (print("\nINVALID: Please ensure item name has no spaces."))
                 else:
                     break
-            
+
             print("\nEnter quantity:")
             while True:
                 quantity = str(input(">>> "))
-                if quantity == "CANCEL":
+                if quantity == "DONE":
                     return
                 if re.search(r"^[0-9]+$", quantity):
                     break
                 else:
                     print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
-            
+
             print("\nEnter unit price: ")
             while True:
                 unit_price = str(input(">>> "))
-                if unit_price == "CANCEL":
+                if unit_price == "DONE":
                     return
                 if re.search(r"^(?:\d+)?(?:\.\d+)?$", unit_price):
                     break
@@ -88,7 +79,7 @@ class ReceiptEntryList:
                 self.tail.next_node = new_node
                 new_node.previous_node = self.tail
                 self.tail = new_node
-            
+
             clear_console()
 
     def delete_entry(self):
@@ -100,14 +91,14 @@ class ReceiptEntryList:
 
             while True:
                 try:
-                    choosen_option = str(input("(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: "))
-                    if choosen_option == "CANCEL":
+                    chosen_option = str(input("(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: "))
+                    if chosen_option == "CANCEL":
                         return
                     else:
-                        choosen_option = int(choosen_option)
+                        chosen_option = int(chosen_option)
 
-                    if choosen_option >= min_value and choosen_option <= max_value:
-                        if self.head and self.head.entry.entry_position == choosen_option:
+                    if chosen_option >= min_value and chosen_option <= max_value:
+                        if self.head and self.head.entry.entry_position == chosen_option:
                             self.head = self.head.next_node
                             if not self.head:
                                 self.tail = None
@@ -118,7 +109,7 @@ class ReceiptEntryList:
                             previous = None
 
                             while current:
-                                if current.entry.entry_position == choosen_option:
+                                if current.entry.entry_position == chosen_option:
                                     if previous:
                                         previous.next_node = current.next_node
                                         self.update_entry_position(current.next_node)
@@ -154,11 +145,11 @@ class ReceiptEntryList:
                         print("\nInvalid option. Please enter a number between 1 and 2.")
                 except ValueError:
                     print("\nInvalid value. Please enter a correct number.")
-        
+
         def change_quantity(node):
             clear_console()
             print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
-            
+
             print("\nEnter new quantity:")
             while True:
                 new_quantity = str(input(">>> "))
@@ -166,7 +157,7 @@ class ReceiptEntryList:
                     break
                 else:
                     print("\nERROR: Invalid quantity. Quantity must be a positive integer (1 and above).")
-            
+
             print(f"\n{node.entry.item_name}\'s quantity will be changed from \"{node.entry.quantity}\" to \"{new_quantity}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
@@ -186,7 +177,7 @@ class ReceiptEntryList:
         def change_unit_price(node):
             clear_console()
             print(f"POS: {node.entry.entry_position}\nITEM NAME: {node.entry.item_name}\nQUANTITY: {node.entry.quantity}\nUNIT PRICE: {node.entry.unit_price}")
-            
+
             print("\nEnter new unit price:")
             while True:
                 new_unit_price = str(input(">>> "))
@@ -194,7 +185,7 @@ class ReceiptEntryList:
                     break
                 else:
                     print("\nERROR: Invalid unit price. Please ensure that it is in correct format (e.g., 150, 250.46, 100.00)")
-            
+
             print(f"\n{node.entry.item_name}\'s unit price will be changed from \"{node.entry.unit_price}\" to \"{float(new_unit_price)}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
@@ -217,16 +208,16 @@ class ReceiptEntryList:
             print("\nChoose option:\n0 = Go back\n1 = Edit item name\n2 = Edit quantity\n3 = Edit unit price\n\n\nChoose option:")
             while True:
                 try:
-                    choosen_option = int(input(">>> "))
-                    if choosen_option == 0:
+                    chosen_option = int(input(">>> "))
+                    if chosen_option == 0:
                         return
-                    if choosen_option == 1:
+                    if chosen_option == 1:
                         change_item_name(node)
                         return
-                    if choosen_option == 2:
+                    if chosen_option == 2:
                         change_quantity(node)
                         return
-                    if choosen_option == 3:
+                    if chosen_option == 3:
                         change_unit_price(node)
                         return
                     else:
@@ -243,16 +234,16 @@ class ReceiptEntryList:
             print("(Type \"CANCEL\" to go back)\n\nType the position number of entry you want to change the details:")
             while True:
                 try:
-                    choosen_option = str(input(">>> "))
-                    if choosen_option == "CANCEL":
+                    chosen_option = str(input(">>> "))
+                    if chosen_option == "CANCEL":
                         return
                     else:
-                        choosen_option = int(choosen_option)
+                        chosen_option = int(chosen_option)
 
-                    if choosen_option >= min_value and choosen_option <= max_value:
+                    if chosen_option >= min_value and chosen_option <= max_value:
                         current = self.head
                         while current:
-                            if choosen_option == current.entry.entry_position:
+                            if chosen_option == current.entry.entry_position:
                                 choose_option(current)
                                 return
                             current = current.next_node
@@ -263,12 +254,6 @@ class ReceiptEntryList:
         else:
             print("\nERROR: Cannot edit as there is nothing to edit.")
             input("Press Enter to proceed...")
-
-    def swap(self, node_1, node_2):
-        node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
-        node_1.quantity, node_2.quantity = node_2.quantity, node_1.quantity
-        node_1.unit_price, node_2.unit_price = node_2.unit_price, node_1.unit_price
-        node_1.total_price, node_2.total_price = node_2.total_price, node_1.total_price
 
     def sort_list(self):
         clear_console()
@@ -284,7 +269,7 @@ class ReceiptEntryList:
                     self.swap(current.entry, next_value.entry)
                 next_value = next_value.next_node
             current = current.next_node
-        
+
         print("SUCCESS: Receipt entries sorted successfully.")
         input("Press Enter to proceed.")
 
@@ -327,7 +312,7 @@ class ReceiptEntryList:
 
                 if new_date == "CANCEL":
                     return
-                
+
                 try:
                     filtered_date = datetime.strptime(new_date, "%Y/%m/%d")
                     break
@@ -351,7 +336,7 @@ class ReceiptEntryList:
                         print("\nInvalid option. Please enter a number between 1 and 2.")
                 except ValueError:
                     print("\nInvalid value. Please enter a correct number.")
-            
+
         def change_time(self):
             clear_console()
             current_time = datetime.strptime(self.time, "%H:%M:%S") if self.time else None
@@ -362,7 +347,7 @@ class ReceiptEntryList:
 
                 if new_time == "CANCEL":
                     return
-                
+
                 try:
                     filtered_time = datetime.strptime(new_time, "%H:%M:%S")
                     break
@@ -386,23 +371,23 @@ class ReceiptEntryList:
                         print("\nInvalid option. Please enter a number between 1 and 2.")
                 except ValueError:
                     print("\nInvalid value. Please enter a correct number.")
-            
+
         display_menu(self)
         print("\nEnter option:")
 
         while True:
             try:
-                choosen_option = int(input(">>> "))
+                chosen_option = int(input(">>> "))
 
-                if choosen_option == 0:
+                if chosen_option == 0:
                     return
-                elif choosen_option == 1:
+                elif chosen_option == 1:
                     change_receipt_code(self)
                     break
-                elif choosen_option == 2:
+                elif chosen_option == 2:
                     change_date(self)
                     break
-                elif choosen_option == 3:
+                elif chosen_option == 3:
                     change_time(self)
                     break
                 else:
@@ -417,23 +402,95 @@ class ReceiptEntryList:
             current.entry.entry_position -= 1
             current = current.next_node
 
+    def export_as_txt(self):
+        clear_console()
+
+        if not self.head:
+            print("Cannot write results as there is nothing to export.")
+            input("Press Enter to proceed...")
+            return
+
+        print("(Type \"CANCEL\" to go back)\n\nEnter file name:")
+        while True:
+            file_name = str(input(">>> "))
+            if file_name == "CANCEL":
+                return
+            elif not re.search(r"^[\w\-. ]+$", file_name):
+                print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
+            elif os.path.exists("user_data/saved_results/txt/" + file_name + ".txt"):
+                print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
+            else:
+                break
+
+        if not os.path.exists("user_data/saved_results/txt"):
+            os.makedirs("user_data/saved_results/txt")
+        else:
+            pass
+
+        with open("user_data/saved_results/txt/" + file_name + ".txt", "w", encoding="utf-8") as f:
+            current = self.head
+            spacing_values = self.get_spacing_values_length()
+            total_price = 0.0
+            total_of_items = 0
+
+            f.write("-" * spacing_values[5])
+            date = self.date if self.date else "<N0_RECEIPT_DATE>"
+            time = self.time if self.time else "<NO_RECEIPT_TIME>"
+            formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
+            f.write(f"\nRECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
+
+            column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+            f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                    column_header[0], spacing_values[0] + 2,
+                    column_header[1], spacing_values[1] + 2,
+                    column_header[2], spacing_values[2] + 2,
+                    column_header[3], spacing_values[3] + 2,
+                    column_header[4], spacing_values[4] + 2
+            ))
+
+            while current is not None:
+                f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                    current.entry.entry_position, spacing_values[0] + 2,
+                    current.entry.item_name, spacing_values[1] + 2,
+                    current.entry.quantity, spacing_values[2] + 2,
+                    current.entry.unit_price, spacing_values[3] + 2,
+                    current.entry.total_price, spacing_values[4] + 2,
+            ))
+                total_price += current.entry.total_price
+
+                total_price = round_num(total_price)
+                total_of_items += 1
+
+                current = current.next_node
+
+            if total_of_items > 1 or total_of_items == 0:
+                item_string = "items"
+            else:
+                item_string = "item"
+
+            f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+            f.write("\n" + "-" * spacing_values[5])
+            f.flush()
+            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/txt/{file_name}.txt\"")
+            input("Press Enter to proceed...")
+
     def export_as_json(self):
         clear_console()
-        
+
         if not self.head:
             print("Cannot export as there is nothing to export.")
             input("Press Enter to proceed...")
             return
-        
-        print("(Type \"CANCEL\" to go back)\n\nEnter filename:")
+
+        print("(Type \"CANCEL\" to go back)\n\nEnter file name:")
         while True:
-            output = str(input(">>> "))
-            if output == "CANCEL":
+            file_name = str(input(">>> "))
+            if file_name == "CANCEL":
                 return
-            elif not re.search(r"^[\w\-. ]+$", output):
-                print("\nInvalid filename. Ensure that no illegal characters are used (i.e., \ / : * ? \" < > |).")
-            elif os.path.exists("user_data/saved_results/json/" + output + ".json"):
-                print(f"\nFile \"{output}.json\" already exist. Please use a different filename.")
+            elif not re.search(r"^[\w\-. ]+$", file_name):
+                print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
+            elif os.path.exists("user_data/saved_results/json/" + file_name + ".json"):
+                print(f"\nFile \"{file_name}.json\" already exist. Please use a different file name.")
             else:
                 break
 
@@ -464,11 +521,87 @@ class ReceiptEntryList:
         receipt["entries"] = entries
 
         json_file = json.dumps(receipt, indent=4, ensure_ascii=False)
-        with open("user_data/saved_results/json/" + output + ".json", "w", encoding="utf-8") as f:
+        with open("user_data/saved_results/json/" + file_name + ".json", "w", encoding="utf-8") as f:
             f.write(json_file)
             f.flush()
-            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/json/{output}.json\"")
+            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/json/{file_name}.json\"")
             input("Press Enter to proceed...")
+
+    def get_spacing_values_length(self):
+        position_max_length = 2
+        item_name_max_length = 9
+        quantity_max_length = 8
+        unit_price_max_length = 10
+        total_price_max_length = 11
+
+        current = self.head
+
+        while current is not None:
+            item_name_max_length = max(item_name_max_length, len(current.entry.item_name))
+            quantity_max_length = max(quantity_max_length, len(current.entry.quantity))
+            unit_price_max_length = max(unit_price_max_length, len(str(current.entry.unit_price)))
+            total_price_max_length = max(total_price_max_length, len(str(current.entry.total_price)))
+
+            current = current.next_node
+
+        spaces_total_length = 10 + position_max_length + item_name_max_length + quantity_max_length + unit_price_max_length + total_price_max_length
+        return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length, spaces_total_length]
+
+    def display_entries(self):
+        clear_console()
+
+        spacing_values = self.get_spacing_values_length()
+
+        total_price = 0.0
+        total_of_items = 0
+        current = self.head
+
+        print("-" * spacing_values[5])
+        if not current:
+            print("LIST IS CURRENTLY EMPTY.\nReceipt entries will be previewed here.")
+        else:
+            date = self.date if self.date else "<N0_RECEIPT_DATE>"
+            time = self.time if self.time else "<NO_RECEIPT_TIME>"
+            formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
+            print(f"RECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
+
+            column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
+            print("{:{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                column_header[0], spacing_values[0] + 2,
+                column_header[1], spacing_values[1] + 2,
+                column_header[2], spacing_values[2] + 2,
+                column_header[3], spacing_values[3] + 2,
+                column_header[4], spacing_values[4] + 2
+            ))
+
+            while current is not None:
+                print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                    current.entry.entry_position, spacing_values[0] + 2,
+                    current.entry.item_name, spacing_values[1] + 2,
+                    current.entry.quantity, spacing_values[2] + 2,
+                    current.entry.unit_price, spacing_values[3] + 2,
+                    current.entry.total_price, spacing_values[4] + 2
+                ))
+
+                total_price += current.entry.total_price
+
+                total_price = round_num(total_price)
+                total_of_items += 1
+
+                current = current.next_node
+
+            if total_of_items > 1 or total_of_items == 0:
+                item_string = "items"
+            else:
+                item_string = "item"
+            print(f"\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+        print("-" * spacing_values[5])
+
+    def swap(self, node_1, node_2):
+        node_1.item_name, node_2.item_name = node_2.item_name, node_1.item_name
+        node_1.quantity, node_2.quantity = node_2.quantity, node_1.quantity
+        node_1.unit_price, node_2.unit_price = node_2.unit_price, node_1.unit_price
+        node_1.total_price, node_2.total_price = node_2.total_price, node_1.total_price
 
 if __name__ == "__main__":
     print("Please run the main.py to run the program.")

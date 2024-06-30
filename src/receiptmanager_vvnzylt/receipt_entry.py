@@ -420,17 +420,17 @@ class ReceiptEntryList:
                 return
             elif not re.search(r"^[\w\-. ]+$", file_name):
                 print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
-            elif os.path.exists("user_data/saved_results/txt/" + file_name + ".txt"):
+            elif os.path.exists("program_data/saved_results/txt/" + file_name + ".txt"):
                 print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
             else:
                 break
 
-        if not os.path.exists("user_data/saved_results/txt"):
-            os.makedirs("user_data/saved_results/txt")
+        if not os.path.exists("program_data/saved_results/txt"):
+            os.makedirs("program_data/saved_results/txt")
         else:
             pass
 
-        with open("user_data/saved_results/txt/" + file_name + ".txt", "w", encoding="utf-8") as f:
+        with open("program_data/saved_results/txt/" + file_name + ".txt", "w", encoding="utf-8") as f:
             current = self.head
             spacing_values = self.get_spacing_values_length()
             total_price = 0.0
@@ -474,7 +474,7 @@ class ReceiptEntryList:
             f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
             f.write("\n" + "-" * spacing_values[5])
             f.flush()
-            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/txt/{file_name}.txt\"")
+            print(f"\nSUCCESS: The results has been saved to \"program_data/saved_results/txt/{file_name}.txt\"")
             input("Press Enter to proceed...")
 
     def export_as_json(self):
@@ -492,13 +492,13 @@ class ReceiptEntryList:
                 return
             elif not re.search(r"^[\w\-. ]+$", file_name):
                 print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
-            elif os.path.exists("user_data/saved_results/json/" + file_name + ".json"):
+            elif os.path.exists("program_data/saved_results/json/" + file_name + ".json"):
                 print(f"\nFile \"{file_name}.json\" already exist. Please use a different file name.")
             else:
                 break
 
-        if not os.path.exists("user_data/saved_results/json"):
-            os.makedirs("user_data/saved_results/json")
+        if not os.path.exists("program_data/saved_results/json"):
+            os.makedirs("program_data/saved_results/json")
 
         receipt = {}
         receipt_header = {
@@ -524,10 +524,10 @@ class ReceiptEntryList:
         receipt["entries"] = entries
 
         json_file = json.dumps(receipt, indent=4, ensure_ascii=False)
-        with open("user_data/saved_results/json/" + file_name + ".json", "w", encoding="utf-8") as f:
+        with open("program_data/saved_results/json/" + file_name + ".json", "w", encoding="utf-8") as f:
             f.write(json_file)
             f.flush()
-            print(f"\nSUCCESS: The results has been saved to \"user_data/saved_results/json/{file_name}.json\"")
+            print(f"\nSUCCESS: The results has been saved to \"program_data/saved_results/json/{file_name}.json\"")
             input("Press Enter to proceed...")
 
     def get_spacing_values_length(self):

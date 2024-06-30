@@ -415,12 +415,16 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
             return
 
-        print("(Type \"CANCEL\" to go back)\n\nEnter file name:")
+        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_number}\"): ")
         while True:
             file_name = str(input(">>> "))
+
+            if re.search(r"\s+", file_name) or not file_name.strip():
+                file_name = self.receipt_number
+
             if file_name == "CANCEL":
                 return
-            elif not re.search(r"^[\w\-. ]+$", file_name):
+            elif not re.search(r"^[\w\-.]+$", file_name):
                 print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
             elif os.path.exists("program_data/saved_results/txt/" + file_name + ".txt"):
                 print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
@@ -487,12 +491,16 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
             return
 
-        print("(Type \"CANCEL\" to go back)\n\nEnter file name:")
+        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_number}\"): ")
         while True:
             file_name = str(input(">>> "))
+
+            if re.search(r"\s+", file_name) or not file_name.strip():
+                file_name = self.receipt_number
+
             if file_name == "CANCEL":
                 return
-            elif not re.search(r"^[\w\-. ]+$", file_name):
+            elif not re.search(r"^[\w\-.]+$", file_name):
                 print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
             elif os.path.exists("program_data/saved_results/json/" + file_name + ".json"):
                 print(f"\nFile \"{file_name}.json\" already exist. Please use a different file name.")

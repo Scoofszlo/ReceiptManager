@@ -9,7 +9,7 @@ def choose_action(action):
         json_file = get_valid_json_file()
 
         if json_file is not None:
-            with open("user_data/saved_results/json/" + json_file + ".json", "r", encoding="utf-8") as file:
+            with open("program_data/saved_results/json/" + json_file + ".json", "r", encoding="utf-8") as file:
                 receipt_obj = import_using_json(file)
                 receipt_options_menu(receipt_obj)
         return
@@ -17,7 +17,7 @@ def choose_action(action):
         txt_file = get_valid_txt_file()
 
         if txt_file is not None:
-            with open("user_data/saved_results/txt/" + txt_file + ".txt", "r", encoding="utf-8") as file:
+            with open("program_data/saved_results/txt/" + txt_file + ".txt", "r", encoding="utf-8") as file:
                 receipt_obj = import_using_txt(file)
                 receipt_options_menu(receipt_obj)
         return
@@ -34,7 +34,7 @@ def get_valid_json_file():
         file_name = str(input(">>> "))
         if file_name == "CANCEL":
             return
-        if os.path.exists("user_data/saved_results/json/" + file_name + ".json"):
+        if os.path.exists("program_data/saved_results/json/" + file_name + ".json"):
             return file_name
         else:
             print(f"\nERROR: {file_name}.json is not found.")
@@ -45,7 +45,7 @@ def get_valid_txt_file():
         file_name = str(input(">>> "))
         if file_name == "CANCEL":
             return
-        if os.path.exists("user_data/saved_results/txt/" + file_name + ".txt"):
+        if os.path.exists("program_data/saved_results/txt/" + file_name + ".txt"):
             return file_name
         else:
             print(f"\nERROR: {file_name}.txt is not found.")

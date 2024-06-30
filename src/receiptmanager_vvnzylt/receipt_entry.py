@@ -29,9 +29,11 @@ class ReceiptEntryNode:
 
 class ReceiptEntryList:
     def __init__(self):
-        self.receipt_number = None
-        self.date = None
-        self.time = None
+        current_date_and_time = datetime.now()
+
+        self.receipt_number = "RM-" + str(current_date_and_time.strftime("%y%m%d_%H%M%S"))
+        self.date = current_date_and_time.strftime("%Y/%m/%d")
+        self.time = current_date_and_time.strftime("%H:%M:%S")
         self.head = None
         self.tail = None
         self.config = load_config()

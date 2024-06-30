@@ -458,12 +458,14 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
+                formatted_unit_price = str(get_currency(self.config)) + str(current.entry.unit_price) if get_currency(self.config) else str(current.entry.unit_price)
+                formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
                 f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
                     current.entry.quantity, spacing_values[2] + 2,
-                    current.entry.unit_price, spacing_values[3] + 2,
-                    current.entry.total_price, spacing_values[4] + 2,
+                    formatted_unit_price, spacing_values[3] + 2,
+                    formatted_total_price, spacing_values[4] + 2,
             ))
                 total_price += current.entry.total_price
 
@@ -477,7 +479,11 @@ class ReceiptEntryList:
             else:
                 item_string = "item"
 
-            f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+            if get_currency(self.config):
+                f.write(f"\n\nTOTAL SUM: {get_currency(self.config)}{total_price:.2f} ({total_of_items} {item_string})")
+            else:
+                f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+
             f.write("\n" + "-" * spacing_values[5])
             f.flush()
             print(f"\nSUCCESS: The results has been saved to \"program_data/saved_results/txt/{file_name}.txt\"")
@@ -588,12 +594,13 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
+                formatted_unit_price = str(get_currency(self.config)) + str(current.entry.unit_price) if get_currency(self.config) else str(current.entry.unit_price)
                 formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
                 print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
                     current.entry.quantity, spacing_values[2] + 2,
-                    current.entry.unit_price, spacing_values[3] + 2,
+                    formatted_unit_price, spacing_values[3] + 2,
                     formatted_total_price, spacing_values[4] + 2
                 ))
 
@@ -608,7 +615,12 @@ class ReceiptEntryList:
                 item_string = "items"
             else:
                 item_string = "item"
-            print(f"\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+
+            if get_currency(self.config):
+                print(f"\nTOTAL SUM: {get_currency(self.config)}{total_price:.2f} ({total_of_items} {item_string})")
+            else:
+                print(f"\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+
         print("-" * spacing_values[5])
 
     def swap(self, node_1, node_2):

@@ -449,7 +449,7 @@ class ReceiptEntryList:
             f.write(f"\nRECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
 
             column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-            f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+            f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     column_header[0], spacing_values[0] + 2,
                     column_header[1], spacing_values[1] + 2,
                     column_header[2], spacing_values[2] + 2,
@@ -458,7 +458,7 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
-                f.write("\n{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
                     current.entry.quantity, spacing_values[2] + 2,
@@ -579,7 +579,7 @@ class ReceiptEntryList:
             print(f"RECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
 
             column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-            print("{:{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+            print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                 column_header[0], spacing_values[0] + 2,
                 column_header[1], spacing_values[1] + 2,
                 column_header[2], spacing_values[2] + 2,
@@ -589,7 +589,7 @@ class ReceiptEntryList:
 
             while current is not None:
                 formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
-                print("{:<{}} {:<{}} {:<{}} {:<{}} {:<{}}".format(
+                print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
                     current.entry.quantity, spacing_values[2] + 2,

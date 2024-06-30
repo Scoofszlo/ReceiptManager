@@ -9,8 +9,13 @@ def change_program_settings():
         print("\nChoose option:\n0 = Go back\n1 = Change currency")
 
     config_location = "./program_data/receiptmanager.config"
-    with open(config_location, "r", encoding="utf-8") as file:
-        config_file = json.load(file)
+    try:
+        with open(config_location, "r", encoding="utf-8") as file:
+            config_file = json.load(file)
+    except FileNotFoundError:
+        print("ERROR: receiptmanager.config is missing. Please ensure that the program_data folder and its contents are not being modified or accessed.")
+        input("\nPress Enter to exit...")
+        exit(0)
 
     display_menu()
     print("\nEnter option:")

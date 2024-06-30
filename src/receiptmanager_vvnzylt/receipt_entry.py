@@ -446,10 +446,17 @@ class ReceiptEntryList:
             date = self.date if self.date else "<N0_RECEIPT_DATE>"
             time = self.time if self.time else "<NO_RECEIPT_TIME>"
             formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
-            f.write(f"\nRECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
+
+            f.write("\n{:^{}}".format(
+                "RECEIPT CODE: " + formatted_receipt_number, spacing_values[5]
+            ))
+
+            f.write("\n{:^{}}".format(
+                "DATE & TIME: " + date + ", " + time, spacing_values[5]
+            ))
 
             column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-            f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
+            f.write("\n\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     column_header[0], spacing_values[0] + 2,
                     column_header[1], spacing_values[1] + 2,
                     column_header[2], spacing_values[2] + 2,
@@ -547,7 +554,7 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
 
     def get_spacing_values_length(self):
-        position_max_length = 2
+        position_max_length = 3
         item_name_max_length = 9
         quantity_max_length = 8
         unit_price_max_length = 10
@@ -563,7 +570,7 @@ class ReceiptEntryList:
 
             current = current.next_node
 
-        spaces_total_length = 10 + position_max_length + item_name_max_length + quantity_max_length + unit_price_max_length + total_price_max_length
+        spaces_total_length = 14 + position_max_length + item_name_max_length + quantity_max_length + unit_price_max_length + total_price_max_length
         return [position_max_length, item_name_max_length, quantity_max_length, unit_price_max_length, total_price_max_length, spaces_total_length]
 
     def display_entries(self):
@@ -582,10 +589,18 @@ class ReceiptEntryList:
             date = self.date if self.date else "<N0_RECEIPT_DATE>"
             time = self.time if self.time else "<NO_RECEIPT_TIME>"
             formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
-            print(f"RECEIPT CODE: {formatted_receipt_number}\nDATE & TIME: {date}, {time}\n")
+
+            print("{:^{}}".format(
+                "RECEIPT CODE: " + formatted_receipt_number, spacing_values[5]
+            ))
+
+            print("{:^{}}".format(
+                "DATE & TIME: " + date + ", " + time, spacing_values[5]
+            ))
+
 
             column_header = ["POS", "ITEM NAME", "QUANTITY", "UNIT PRICE", "TOTAL PRICE"]
-            print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
+            print("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                 column_header[0], spacing_values[0] + 2,
                 column_header[1], spacing_values[1] + 2,
                 column_header[2], spacing_values[2] + 2,

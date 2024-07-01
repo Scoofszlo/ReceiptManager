@@ -86,14 +86,17 @@ class ReceiptEntryList:
 
     def delete_entry(self):
         clear_console()
+        self.display_entries()
 
         if self.head:
             min_value = self.head.entry.entry_position
             max_value= self.tail.entry.entry_position
 
+            print("\n(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: ")
+
             while True:
                 try:
-                    chosen_option = str(input("(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: "))
+                    chosen_option = str(input(">>> "))
                     if chosen_option == "CANCEL":
                         return
                     else:
@@ -121,9 +124,9 @@ class ReceiptEntryList:
                                 previous = current
                                 current = current.next_node
                     else:
-                        print("ERROR: Please enter a valid number to delete.")
+                        print("\nERROR: Please enter a valid number to delete.")
                 except ValueError:
-                    print("ERROR: Please enter a valid number to delete.")
+                    print("\nERROR: Please enter a valid number to delete.")
         else:
             print("\nERROR: Cannot delete as there is nothing to delete.")
             input("Press Enter to proceed...")
@@ -228,12 +231,13 @@ class ReceiptEntryList:
                     print("\nERROR: Please enter a valid number between 0 and 3.")
 
         clear_console()
+        self.display_entries()
 
         if self.head:
             min_value = self.head.entry.entry_position
             max_value = self.tail.entry.entry_position
 
-            print("(Type \"CANCEL\" to go back)\n\nType the position number of entry you want to change the details:")
+            print("\n(Type \"CANCEL\" to go back)\n\nType the position number of entry you want to change the details:")
             while True:
                 try:
                     chosen_option = str(input(">>> "))

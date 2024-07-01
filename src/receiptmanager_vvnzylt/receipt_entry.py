@@ -466,8 +466,9 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
-                formatted_unit_price = str(get_currency(self.config)) + str(current.entry.unit_price) if get_currency(self.config) else str(current.entry.unit_price)
-                formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
+                currency = get_currency(self.config)
+                formatted_unit_price = f"{currency}{float(current.entry.unit_price):.2f}" if currency else f"{float(current.entry.unit_price):.2f}"
+                formatted_total_price = f"{currency}{float(current.entry.total_price):.2f}" if currency else f"{float(current.entry.total_price):.2f}"
                 f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
@@ -610,8 +611,9 @@ class ReceiptEntryList:
             ))
 
             while current is not None:
-                formatted_unit_price = str(get_currency(self.config)) + str(current.entry.unit_price) if get_currency(self.config) else str(current.entry.unit_price)
-                formatted_total_price = str(get_currency(self.config)) + str(current.entry.total_price) if get_currency(self.config) else str(current.entry.total_price)
+                currency = get_currency(self.config)
+                formatted_unit_price = f"{currency}{float(current.entry.unit_price):.2f}" if currency else f"{float(current.entry.unit_price):.2f}"
+                formatted_total_price = f"{currency}{float(current.entry.total_price):.2f}" if currency else f"{float(current.entry.total_price):.2f}"
                 print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,

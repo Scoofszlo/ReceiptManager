@@ -19,13 +19,10 @@ class ReceiptEntryNode:
         self.entry.item_name = item_name
         self.entry.quantity = quantity
         self.entry.unit_price = round_num(unit_price)
-        self.entry.total_price = self.compute_total_price(quantity, self.entry.unit_price)
+        self.entry.total_price = round_num(int(quantity) * self.entry.unit_price)
         self.entry.entry_position = entry_position
         self.previous_node = None
         self.next_node = None
-
-    def compute_total_price(self, quantity, unit_price):
-        return int(quantity) * unit_price
 
 class ReceiptEntryList:
     def __init__(self):
@@ -170,7 +167,7 @@ class ReceiptEntryList:
                     option = int(input(">>> "))
                     if option == 1:
                         node.entry.quantity = new_quantity
-                        node.entry.total_price = node.compute_total_price(new_quantity, node.entry.unit_price)
+                        node.entry.total_price = round_num(int(new_quantity) * float(node.entry.unit_price))
                         return
                     elif option == 2:
                         return
@@ -198,7 +195,7 @@ class ReceiptEntryList:
                     option = int(input(">>> "))
                     if option == 1:
                         node.entry.unit_price = float(new_unit_price)
-                        node.entry.total_price = node.compute_total_price(node.entry.quantity, float(new_unit_price))
+                        node.entry.total_price = round_num(int(node.entry.quantity) * float(new_unit_price))
                         return
                     elif option == 2:
                         return

@@ -30,10 +30,10 @@ def change_program_settings():
                 clear_console()
                 change_currency(config_file)
             else:
-                print("\nInvalid option. Please enter a number between 1 and 4.")
+                print("\nERROR: Invalid option. Please enter a number between 1 and 4.")
                 continue
         except ValueError:
-            print("\nInvalid value. Please enter a correct number.")
+            print("\nERROR: Invalid value. Please enter a correct number.")
             continue
 
         display_menu()
@@ -68,10 +68,10 @@ def change_currency(config_file):
             elif option == 5:
                 config_file["currency"] = [currency[4]]
             else:
-                print("\nInvalid option. Please enter a number between 1 and 4.")
+                print("\nERROR: Invalid option. Please enter a number between 1 and 4.")
                 continue
         except ValueError:
-            print("\nInvalid value. Please enter a correct number.")
+            print("\nERROR: Invalid value. Please enter a correct number.")
             continue
 
         update_config(config_file)

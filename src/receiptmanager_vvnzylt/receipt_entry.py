@@ -48,7 +48,7 @@ class ReceiptEntryList:
                 if item_name == "DONE":
                     return
                 if re.search(r"\s", item_name):
-                    (print("\nINVALID: Please ensure item name has no spaces."))
+                    (print("\nERROR: Please ensure item name has no spaces."))
                 else:
                     break
 
@@ -147,9 +147,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         def change_quantity(node):
             clear_console()
@@ -175,9 +175,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         def change_unit_price(node):
             clear_console()
@@ -203,9 +203,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         def choose_option(node):
             clear_console()
@@ -304,9 +304,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         def change_date(self):
             clear_console()
@@ -339,9 +339,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         def change_time(self):
             clear_console()
@@ -374,9 +374,9 @@ class ReceiptEntryList:
                     elif option == 2:
                         return
                     else:
-                        print("\nInvalid option. Please enter a number between 1 and 2.")
+                        print("\nERROR: Invalid option. Please enter a number between 1 and 2.")
                 except ValueError:
-                    print("\nInvalid value. Please enter a correct number.")
+                    print("\nERROR: Invalid value. Please enter a correct number.")
 
         display_menu(self)
         print("\nEnter option:")
@@ -397,9 +397,9 @@ class ReceiptEntryList:
                     change_time(self)
                     break
                 else:
-                    print("\nInvalid option. Please enter a number between 0 and 3.")
+                    print("\nERROR: Invalid option. Please enter a number between 0 and 3.")
             except ValueError:
-                print("\nInvalid value. Please enter a correct number.")
+                print("\nERROR: Invalid value. Please enter a correct number.")
 
     def update_entry_position(self, node):
         current = node
@@ -426,7 +426,7 @@ class ReceiptEntryList:
             if file_name == "CANCEL":
                 return
             elif not re.search(r"^[\w\-.]+$", file_name):
-                print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
+                print("\nERROR: Invalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
             elif os.path.exists("program_data/saved_results/txt/" + file_name + ".txt"):
                 print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
             else:
@@ -516,7 +516,7 @@ class ReceiptEntryList:
             if file_name == "CANCEL":
                 return
             elif not re.search(r"^[\w\-.]+$", file_name):
-                print("\nInvalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
+                print("\nERROR: Invalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
             elif os.path.exists("program_data/saved_results/json/" + file_name + ".json"):
                 print(f"\nFile \"{file_name}.json\" already exist. Please use a different file name.")
             else:

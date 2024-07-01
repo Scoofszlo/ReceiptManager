@@ -30,10 +30,10 @@ def main():
                 input("\nPress Enter to exit...")
                 break
             else:
-                print("\nInvalid option. Please enter a number between 1 and 5.")
+                print("\nERROR: Invalid option. Please enter a number between 1 and 5.")
                 continue
         except ValueError:
-            print("\nInvalid value. Please enter a correct number.")
+            print("\nERROR: Invalid value. Please enter a correct number.")
             continue
 
         display_message()

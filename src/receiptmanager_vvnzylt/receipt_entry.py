@@ -28,7 +28,7 @@ class ReceiptEntryList:
     def __init__(self):
         current_date_and_time = datetime.now()
 
-        self.receipt_number = "RM-" + str(current_date_and_time.strftime("%y%m%d_%H%M%S"))
+        self.receipt_code = "RM-" + str(current_date_and_time.strftime("%y%m%d_%H%M%S"))
         self.date = current_date_and_time.strftime("%Y/%m/%d")
         self.time = current_date_and_time.strftime("%H:%M:%S")
         self.head = None
@@ -282,7 +282,7 @@ class ReceiptEntryList:
     def change_receipt_header(self):
         def display_menu(self):
             clear_console()
-            print(f"\nReceipt code: {self.receipt_number}")
+            print(f"\nReceipt code: {self.receipt_code}")
             print(f"Date/time: {self.date}, {self.time}")
             print("\nChoose option:\n0 = Go back\n1 = Change receipt code\n2 = Change date\n3 = Change time")
 
@@ -293,13 +293,13 @@ class ReceiptEntryList:
             if new_name == "CANCEL":
                 return
 
-            print(f"\n\"{self.receipt_number}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
+            print(f"\n\"{self.receipt_code}\" will be changed into \"{new_name}\". Confirm change?\n1 = Yes\n2 = No\n\nEnter option: ")
 
             while True:
                 try:
                     option = int(input(">>> "))
                     if option == 1:
-                        self.receipt_number = new_name
+                        self.receipt_code = new_name
                         break
                     elif option == 2:
                         return
@@ -416,12 +416,12 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
             return
 
-        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_number}\"): ")
+        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_code}\"): ")
         while True:
             file_name = str(input(">>> "))
 
             if re.search(r"\s+", file_name) or not file_name.strip():
-                file_name = self.receipt_number
+                file_name = self.receipt_code
 
             if file_name == "CANCEL":
                 return
@@ -446,7 +446,7 @@ class ReceiptEntryList:
             f.write("-" * spacing_values[5])
             date = self.date if self.date else "<N0_RECEIPT_DATE>"
             time = self.time if self.time else "<NO_RECEIPT_TIME>"
-            formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
+            formatted_receipt_number = self.receipt_code if self.receipt_code else "<NO_RECEIPT_CODE>"
 
             f.write("\n{:^{}}".format(
                 "RECEIPT CODE: " + formatted_receipt_number, spacing_values[5]
@@ -506,12 +506,12 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
             return
 
-        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_number}\"): ")
+        print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{self.receipt_code}\"): ")
         while True:
             file_name = str(input(">>> "))
 
             if re.search(r"\s+", file_name) or not file_name.strip():
-                file_name = self.receipt_number
+                file_name = self.receipt_code
 
             if file_name == "CANCEL":
                 return
@@ -527,7 +527,7 @@ class ReceiptEntryList:
 
         receipt = {}
         receipt_header = {
-            "receipt_code": self.receipt_number,
+            "receipt_code": self.receipt_code,
             "date": self.date,
             "time": self.time
         }
@@ -590,7 +590,7 @@ class ReceiptEntryList:
         else:
             date = self.date if self.date else "<N0_RECEIPT_DATE>"
             time = self.time if self.time else "<NO_RECEIPT_TIME>"
-            formatted_receipt_number = self.receipt_number if self.receipt_number else "<NO_RECEIPT_CODE>"
+            formatted_receipt_number = self.receipt_code if self.receipt_code else "<NO_RECEIPT_CODE>"
 
             print("{:^{}}".format(
                 "RECEIPT CODE: " + formatted_receipt_number, spacing_values[5]

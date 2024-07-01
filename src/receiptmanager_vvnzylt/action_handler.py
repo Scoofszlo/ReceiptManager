@@ -55,7 +55,7 @@ def import_using_json(file):
 
     json_file = json.load(file)
 
-    receipt_obj.receipt_number = json_file["receipt_header"]["receipt_code"]
+    receipt_obj.receipt_code = json_file["receipt_header"]["receipt_code"]
     receipt_obj.date = json_file["receipt_header"]["date"]
     receipt_obj.time = json_file["receipt_header"]["time"]
 
@@ -84,7 +84,7 @@ def import_using_txt(file):
 
             if ctr == 0:
                 check_header_line(ctr, splitted_value, value)
-                receipt_obj.receipt_number = splitted_value[0]
+                receipt_obj.receipt_code = splitted_value[0]
                 receipt_obj.date = splitted_value[1]
                 receipt_obj.time = splitted_value[2]
             else:

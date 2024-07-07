@@ -467,12 +467,13 @@ class ReceiptEntryList:
 
             while current is not None:
                 currency = get_currency(self.config)
-                formatted_unit_price = f"{currency}{float(current.entry.unit_price):.2f}" if currency else f"{float(current.entry.unit_price):.2f}"
-                formatted_total_price = f"{currency}{float(current.entry.total_price):.2f}" if currency else f"{float(current.entry.total_price):.2f}"
+                formatted_quantity = f"{int(current.entry.quantity):,}"
+                formatted_unit_price = f"{currency}{float(current.entry.unit_price):,.2f}" if currency else f"{float(current.entry.unit_price):,.2f}"
+                formatted_total_price = f"{currency}{float(current.entry.total_price):,.2f}" if currency else f"{float(current.entry.total_price):,.2f}"
                 f.write("\n{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
-                    current.entry.quantity, spacing_values[2] + 2,
+                    formatted_quantity, spacing_values[2] + 2,
                     formatted_unit_price, spacing_values[3] + 2,
                     formatted_total_price, spacing_values[4] + 2,
             ))
@@ -489,9 +490,9 @@ class ReceiptEntryList:
                 item_string = "item"
 
             if get_currency(self.config):
-                f.write(f"\n\nTOTAL SUM: {get_currency(self.config)}{total_price:.2f} ({total_of_items} {item_string})")
+                f.write(f"\n\nTOTAL SUM: {get_currency(self.config)}{total_price:,.2f} ({total_of_items} {item_string})")
             else:
-                f.write(f"\n\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+                f.write(f"\n\nTOTAL SUM: {total_price:,.2f} ({total_of_items} {item_string})")
 
             f.write("\n" + "-" * spacing_values[5])
             f.flush()
@@ -612,12 +613,13 @@ class ReceiptEntryList:
 
             while current is not None:
                 currency = get_currency(self.config)
-                formatted_unit_price = f"{currency}{float(current.entry.unit_price):.2f}" if currency else f"{float(current.entry.unit_price):.2f}"
-                formatted_total_price = f"{currency}{float(current.entry.total_price):.2f}" if currency else f"{float(current.entry.total_price):.2f}"
+                formatted_quantity = f"{int(current.entry.quantity):,}"
+                formatted_unit_price = f"{currency}{float(current.entry.unit_price):,.2f}" if currency else f"{float(current.entry.unit_price):,.2f}"
+                formatted_total_price = f"{currency}{float(current.entry.total_price):,.2f}" if currency else f"{float(current.entry.total_price):,.2f}"
                 print("{:<{}} {:>{}} {:>{}} {:>{}} {:>{}}".format(
                     current.entry.entry_position, spacing_values[0] + 2,
                     current.entry.item_name, spacing_values[1] + 2,
-                    current.entry.quantity, spacing_values[2] + 2,
+                    formatted_quantity, spacing_values[2] + 2,
                     formatted_unit_price, spacing_values[3] + 2,
                     formatted_total_price, spacing_values[4] + 2
                 ))
@@ -635,9 +637,9 @@ class ReceiptEntryList:
                 item_string = "item"
 
             if get_currency(self.config):
-                print(f"\nTOTAL SUM: {get_currency(self.config)}{total_price:.2f} ({total_of_items} {item_string})")
+                print(f"\nTOTAL SUM: {get_currency(self.config)}{total_price:,.2f} ({total_of_items} {item_string})")
             else:
-                print(f"\nTOTAL SUM: {total_price:.2f} ({total_of_items} {item_string})")
+                print(f"\nTOTAL SUM: {total_price:,.2f} ({total_of_items} {item_string})")
 
         print("-" * spacing_values[5])
 

@@ -1,8 +1,8 @@
 import os
 import json
-from receiptmanager_vvnzylt.receipt_entry import ReceiptEntryList, ReceiptEntryNode
-from receiptmanager_vvnzylt.legacy.receipt_validator import check_line_length, check_header_line, check_receipt_entry
-from receiptmanager_vvnzylt.program_settings import change_program_settings
+from receiptmanager_scoofszlo.receipt_entry import ReceiptEntryList, ReceiptEntryNode
+from receiptmanager_scoofszlo.legacy.receipt_validator import check_line_length, check_header_line, check_receipt_entry
+from receiptmanager_scoofszlo.program_settings import change_program_settings
 
 def choose_action(action):
     if action == "IMPORT_USING_JSON":

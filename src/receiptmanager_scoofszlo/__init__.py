@@ -1,5 +1,5 @@
 import os
-from receiptmanager_vvnzylt.config import get_default_program_config
+from receiptmanager_scoofszlo.config import get_default_program_config
 
 def initialize_program_folder():
     program_folder = "./program_data/"

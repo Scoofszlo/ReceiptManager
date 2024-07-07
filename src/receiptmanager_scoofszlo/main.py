@@ -1,5 +1,5 @@
-from receiptmanager_vvnzylt.action_handler import choose_action
-from receiptmanager_vvnzylt.utils import clear_console
+from receiptmanager_scoofszlo.action_handler import choose_action
+from receiptmanager_scoofszlo.utils import clear_console
 
 def main():
     def display_message():

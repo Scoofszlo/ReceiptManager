@@ -1,7 +1,7 @@
 import json
-from receiptmanager_vvnzylt.utils import clear_console
-from receiptmanager_vvnzylt.currency import currency
-from receiptmanager_vvnzylt.config import update_config
+from receiptmanager_scoofszlo.utils import clear_console
+from receiptmanager_scoofszlo.currency import currency
+from receiptmanager_scoofszlo.config import update_config
 
 def change_program_settings():
     def display_menu():

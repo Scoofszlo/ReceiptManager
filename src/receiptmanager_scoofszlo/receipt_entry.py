@@ -2,9 +2,9 @@ import re
 import os
 import json
 from datetime import datetime
-from receiptmanager_vvnzylt.utils import round_num, clear_console
-from receiptmanager_vvnzylt.currency import get_currency
-from receiptmanager_vvnzylt.config import load_config
+from receiptmanager_scoofszlo.utils import round_num, clear_console
+from receiptmanager_scoofszlo.currency import get_currency
+from receiptmanager_scoofszlo.config import load_config
 
 class ReceiptEntry:
     item_name: str

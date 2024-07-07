@@ -1,5 +1,5 @@
 import json
-from receiptmanager_vvnzylt.currency import currency
+from receiptmanager_scoofszlo.currency import currency
 
 def get_default_program_config():
     default_config = {

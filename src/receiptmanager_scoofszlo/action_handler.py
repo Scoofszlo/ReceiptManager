@@ -108,7 +108,7 @@ def import_using_txt(file):
 def receipt_options_menu(receipt_obj):
     def display_menu():
         receipt_obj.display_entries()
-        print("\nChoose option:\n0 = Go back\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort the list by total price in descending order\n5 = Change receipt header\n6 = Export as .TXT file (for formatted results)\n7 = Export as .JSON file (for importing)\n8 = Discard and exit the program.")
+        print("\nChoose option:\n0 = Go back\n1 = Add entry\n2 = Delete entry\n3 = Edit entry details\n4 = Sort list\n5 = Change receipt header\n6 = Export as .TXT file (for formatted results)\n7 = Export as .JSON file (for importing)\n8 = Discard and exit the program.")
 
     display_menu()
     print("\nEnter option:")

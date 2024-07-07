@@ -262,22 +262,94 @@ class ReceiptEntryList:
             input("Press Enter to proceed...")
 
     def sort_list(self):
-        clear_console()
+        def display_menu():
+            clear_console()
+            print("Choose option:\n0 = Go back\n1 = Sort by item name\n2 = Sort by quantity\n3 = Sort by unit price\n4 = Sort by total price")
 
-        current = self.head
+        def sort_by_item_name():
+            current = self.head
 
-        while current is not None:
-            next_value = current.next_node
-            while next_value is not None:
-                # Swapping will happen if the current node has less value than its next node. However, if there are items that have same values,
-                # string comparison will happen in which letters will be arranged from Z to A.
-                if (current.entry.total_price < next_value.entry.total_price) or (current.entry.total_price == next_value.entry.total_price and current.entry.item_name < next_value.entry.item_name):
-                    self.swap(current.entry, next_value.entry)
-                next_value = next_value.next_node
-            current = current.next_node
+            while current is not None:
+                next_value = current.next_node
+                while next_value is not None:
+                    if current.entry.item_name > next_value.entry.item_name:
+                        self.swap(current.entry, next_value.entry)
+                    next_value = next_value.next_node
+                current = current.next_node
+            
+            print("\nSUCCESS: Receipt entries sorted successfully.")
+            input("Press Enter to proceed.")
 
-        print("SUCCESS: Receipt entries sorted successfully.")
-        input("Press Enter to proceed.")
+        def sort_by_quantity():
+            current = self.head
+
+            while current is not None:
+                next_value = current.next_node
+                while next_value is not None:
+                    if int(current.entry.quantity) > int(next_value.entry.quantity):
+                        self.swap(current.entry, next_value.entry)
+                    next_value = next_value.next_node
+                current = current.next_node
+            
+            print("\nSUCCESS: Receipt entries sorted successfully.")
+            input("Press Enter to proceed.")
+
+        def sort_by_unit_price():
+            current = self.head
+
+            while current is not None:
+                next_value = current.next_node
+                while next_value is not None:
+                    if float(current.entry.unit_price) > float(next_value.entry.unit_price):
+                        self.swap(current.entry, next_value.entry)
+                    next_value = next_value.next_node
+                current = current.next_node
+            
+            print("\nSUCCESS: Receipt entries sorted successfully.")
+            input("Press Enter to proceed.")
+
+        def sort_by_total_price():
+            current = self.head
+
+            while current is not None:
+                next_value = current.next_node
+                while next_value is not None:
+                    # Swapping will happen if the current node has less value than its next node. However, if there are items that have same values,
+                    # string comparison will happen in which letters will be arranged from Z to A.
+                    if (current.entry.total_price < next_value.entry.total_price) or (current.entry.total_price == next_value.entry.total_price and current.entry.item_name < next_value.entry.item_name):
+                        self.swap(current.entry, next_value.entry)
+                    next_value = next_value.next_node
+                current = current.next_node
+            
+            print("\nSUCCESS: Receipt entries sorted successfully.")
+            input("Press Enter to proceed.")
+
+        display_menu()
+        print("\nEnter option:")
+
+        while True:
+            try:
+                chosen_option = int(input(">>> "))
+
+                if chosen_option == 0:
+                    return
+                elif chosen_option == 1:
+                    sort_by_item_name()
+                    break
+                elif chosen_option == 2:
+                    sort_by_quantity()
+                    break
+                elif chosen_option == 3:
+                    sort_by_unit_price()
+                    break
+                elif chosen_option == 4:
+                    sort_by_total_price()
+                    break
+                else:
+                    print("\nERROR: Invalid option. Please enter a number between 0 and 3.")
+            except ValueError:
+                print("\nERROR: Invalid value. Please enter a correct number.")
+
 
     def change_receipt_header(self):
         def display_menu(self):

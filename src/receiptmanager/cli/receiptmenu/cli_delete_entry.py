@@ -33,5 +33,11 @@ def display(receipt_obj):
             print("\nERROR: Please enter a valid number to delete.")
             continue
 
+        if is_receipt_list_empty(receipt_obj):
+            clear_console()
+            print("\nINFO: There are no entries left as of all the entries have been deleted.")
+            input("Press Enter to proceed...")
+            return
+
         display_entries(receipt_obj)
         print("\n(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: ")

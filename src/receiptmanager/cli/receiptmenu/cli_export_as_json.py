@@ -16,7 +16,7 @@ def display(receipt_obj):
         return
 
     print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{receipt_obj.receipt_code}\"): ")
-    file_name = get_file_name_input(receipt_obj)
+    file_name = get_file_name_input(receipt_obj, file_type="JSON")
 
     if not is_path_exists(JSON_SAVED_RESULTS_FOLDER_PATH):
         create_folder_path(JSON_SAVED_RESULTS_FOLDER_PATH)

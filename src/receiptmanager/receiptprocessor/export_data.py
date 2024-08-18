@@ -1,11 +1,10 @@
 import json
 import re
-import os
 from src.receiptmanager.constants import TXT_SAVED_RESULTS_FOLDER_PATH, JSON_SAVED_RESULTS_FOLDER_PATH
 from src.receiptmanager.receiptprocessor.general import get_spacing_values_length, get_currency_symbol
-from src.receiptmanager.utils import round_num
+from src.receiptmanager.utils import is_path_exists, round_num
 
-def get_file_name_input(receipt_obj):
+def get_file_name_input(receipt_obj, file_type):
     while True:
         file_name = str(input(">>> "))
 
@@ -14,12 +13,17 @@ def get_file_name_input(receipt_obj):
 
         if file_name == "CANCEL":
             return file_name
-        elif not re.search(r"^[\w\-.]+$", file_name):
+        if not re.search(r"^[\w\-.]+$", file_name):
             print("\nERROR: Invalid file name. Ensure that no illegal characters are used (i.e., \\ / : * ? \" < > |).")
             continue
-        elif os.path.exists("program_data/saved_results/txt/" + file_name + ".txt"):
-            print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
-            continue
+        if file_type == "JSON":
+            if is_path_exists(JSON_SAVED_RESULTS_FOLDER_PATH + file_name + ".json"):
+                print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
+                continue
+        elif file_type == "TXT":
+            if is_path_exists(TXT_SAVED_RESULTS_FOLDER_PATH + file_name + ".txt"):
+                print(f"\nFile \"{file_name}\" already exist. Please use a different file name.")
+                continue
         return file_name
 
 def export_as_txt(receipt_obj, file_name):

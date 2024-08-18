@@ -16,7 +16,7 @@ def display(receipt_obj):
         return
 
     print(f"(Type \"CANCEL\" to go back)\n\nEnter file name. Type nothing to use default name (\"{receipt_obj.receipt_code}\"): ")
-    file_name = get_file_name_input(receipt_obj)
+    file_name = get_file_name_input(receipt_obj, file_type="TXT")
 
     if not is_path_exists(TXT_SAVED_RESULTS_FOLDER_PATH):
         create_folder_path(TXT_SAVED_RESULTS_FOLDER_PATH)

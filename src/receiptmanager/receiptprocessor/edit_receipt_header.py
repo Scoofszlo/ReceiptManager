@@ -30,6 +30,12 @@ def get_new_date_input():
         return datetime.strptime(new_date, "%Y/%m/%d")
     
 def get_new_time_input():
+    """
+    Gets user input for new time to be changed. The user input will loop
+    forever whenever user enters an empty string or whitespace characters, or if
+    user enters other than a valid 24-hour time format value. In the end, this
+    functions returns either a time with seconds with or without seconds included.
+    """
     while True:
         new_time = str(input(">>> "))
         if re.search(r"^\s*$", new_time):
@@ -40,7 +46,10 @@ def get_new_time_input():
         elif is_invalid_time_format(new_time):
             print("\nERROR: Invalid time. Please ensure that time is in proper HH:MM:SS format (e.g., 20:01:59)")
             continue
-        return datetime.strptime(new_time, "%H:%M:%S")
+        try:
+            return datetime.strptime(new_time, "%H:%M:%S")
+        except ValueError:
+            return datetime.strptime(new_time, "%H:%M")
 
 def is_invalid_date_format(new_date):
     try:
@@ -50,11 +59,21 @@ def is_invalid_date_format(new_date):
         return True
 
 def is_invalid_time_format(new_time):
+    """
+    Checks whether the entered time is a valid 24-hour format or not.
+    There are two passes to validate the input. The first pass checks 
+    if seconds are included. If that fails, it goes through the second
+    pass wherein seconds ae not required to be included.
+    However, hours and minutes are still required.
+    """
     try:
         datetime.strptime(new_time, "%H:%M:%S")
-        return False
     except ValueError:
-        return True
+        try:
+            datetime.strptime(new_time, "%H:%M")
+            return False
+        except ValueError:
+            return True
 
 def parse_current_receipt_date(receipt_obj):
     return datetime.strptime(receipt_obj.date, "%Y/%m/%d") if receipt_obj.date else None

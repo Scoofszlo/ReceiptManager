@@ -12,6 +12,26 @@ def get_lowest_idx_pos(receipt_obj):
 def get_highest_idx_pos(receipt_obj):
     return receipt_obj.tail.entry.entry_position
 
+def get_valid_positions(receipt_obj):
+    """
+    Returns the lowest and highest index positions as a list if there is at
+    least one entry existing from receipt entry list. Otherwise, do nothing.
+    """
+    if receipt_obj.head:
+        return [get_lowest_idx_pos(receipt_obj), get_highest_idx_pos(receipt_obj)]
+
+def is_in_valid_positions(position, valid_positions):
+    """
+    If the position entered by the user is within the range, it will
+    return a true value. Otherwise, false value will be returned.
+    """
+    min_idx = valid_positions[0]
+    max_idx = valid_positions[1]
+
+    if min_idx <= position <= max_idx:
+        return True
+    return False
+
 def get_currency(config):
     return config["currency"]
 

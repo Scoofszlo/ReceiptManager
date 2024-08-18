@@ -1,4 +1,9 @@
-from src.receiptmanager.receiptprocessor.general import is_receipt_list_empty, display_entries, get_lowest_idx_pos, get_highest_idx_pos
+from src.receiptmanager.receiptprocessor.general import (
+    is_receipt_list_empty,
+    display_entries,
+    get_valid_positions,
+    is_in_valid_positions
+)
 from src.receiptmanager.receiptprocessor.delete_entry import delete_entry
 from src.receiptmanager.utils import clear_console
 
@@ -11,8 +16,7 @@ def display(receipt_obj):
         return
 
     display_entries(receipt_obj)
-    min_value = get_lowest_idx_pos(receipt_obj)
-    max_value = get_highest_idx_pos(receipt_obj)
+    valid_positions = get_valid_positions(receipt_obj) # Gets the valid positions of each entry that can be deleted
 
     print("\n(Type \"CANCEL\" to go back)\n\nType the position number of item you want to delete: ")
 
@@ -24,8 +28,9 @@ def display(receipt_obj):
             else:
                 position = int(position)
 
-            if position >= min_value and position <= max_value:
+            if is_in_valid_positions(position, valid_positions):
                 delete_entry(receipt_obj, position)
+                valid_positions = get_valid_positions(receipt_obj) # This is called again to update the valid positions since deletion was done
             else:
                 print("\nERROR: Please enter a valid number to delete.")
                 continue
